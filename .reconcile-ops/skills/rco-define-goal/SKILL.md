@@ -50,6 +50,7 @@ It is not a GitHub Project issue and must not contain status metadata.
    - `Verification Method`
 8. Stop and report missing confirmations if the Goal cannot be made verifiable.
 9. Verify no state metadata appears in the Goal file.
+10. Remind the user to run `rco-create-pr` for the Goal document changes.
 
 ## Implementation Templates
 
@@ -126,3 +127,4 @@ Git unchanged unless another Goal can be safely defined.
 - [ ] `Source Requirements` uses Markdown relative links
 - [ ] Goal has acceptance criteria and verification method
 - [ ] Goal file has no project status metadata
+- [ ] User is reminded to run `rco-create-pr`

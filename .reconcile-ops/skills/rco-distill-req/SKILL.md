@@ -1,6 +1,6 @@
 ---
 name: rco-distill-req
-description: Distill messy client input into a cleaned ReconcileOps requirement document. Use when Codex receives meeting notes, STT transcripts, Notion pages, Slack messages, emails, client feedback, or PM notes and needs to create or update docs/requirements/<business-topic>.md without committing raw input or unconfirmed questions.
+description: Distill messy client input or interview-style Q&A into a cleaned ReconcileOps requirement document. Use when Codex receives meeting notes, STT transcripts, Notion pages, Slack messages, emails, client feedback, or a one-question-at-a-time interview and needs to create or update docs/requirements/<business-topic>.md without committing raw input or unconfirmed questions.
 ---
 
 # RCO Distill Requirement
@@ -17,6 +17,7 @@ what the client explicitly does not want, and stable constraints.
 
 - Converting client meeting notes into a requirement document
 - Condensing STT transcripts, Slack threads, emails, Notion notes, or PM notes
+- Running an interview-style requirement intake one question at a time
 - Updating `docs/requirements/<business-topic>.md` after stable client intent changes
 - Separating confirmed requirements from raw discussion noise
 
@@ -34,15 +35,17 @@ what the client explicitly does not want, and stable constraints.
 1. Read `.reconcile-ops/RULE.md`.
 2. Read `.reconcile-ops/examples/requirement.md` for structure only.
 3. Review the provided messy input.
-4. Identify the business topic and choose a kebab-case file name under `docs/requirements/`.
-5. Write only stable content into the requirement document:
+4. If the user requests interview-style intake, ask one focused question at a time until there is enough stable content to write the requirement document.
+5. Identify the business topic and choose a kebab-case file name under `docs/requirements/`.
+6. Write only stable content into the requirement document:
    - `Context`
    - `Client Wants`
    - `Client Does Not Want`
    - `Constraints`
-6. Keep unresolved questions out of the file.
-7. Report unresolved questions in the final response as PM follow-up items.
-8. Verify the output contains no status metadata, internal IDs, timestamps, raw transcript, or source dump.
+7. Keep unresolved questions out of the file.
+8. Report unresolved questions in the final response as PM follow-up items.
+9. Verify the output contains no status metadata, internal IDs, timestamps, raw transcript, interview transcript, or source dump.
+10. Ask the user whether to continue directly with `rco-define-goal` or run `rco-create-pr` first.
 
 ## Implementation Templates
 
@@ -84,12 +87,14 @@ content remains.
 | --- | --- |
 | "The transcript is useful context, so commit it." | Do not commit raw client input. Distill only stable requirements. |
 | "Questions are important, so put them in the file." | Report questions in the response; do not write unconfirmed questions into Git. |
+| "The interview transcript should be saved." | Do not commit interview transcript. Distill only stable requirements. |
 | "A single client sentence deserves a file." | Group requirements by business topic. |
 | "This is probably a Goal." | Requirements and Goals are separate artifacts. Use `rco-define-goal` later. |
 
 ## Red Flags
 
 - File contains raw transcript, Slack dump, email dump, or STT text
+- File contains interview transcript instead of distilled requirements
 - File contains `status`, `owner`, `milestone`, priority, progress, created time, or updated time
 - File contains open questions or unresolved assumptions
 - Requirement file is named after a meeting date instead of a business topic
@@ -101,6 +106,8 @@ content remains.
 - [ ] Output path is `docs/requirements/<business-topic>.md`
 - [ ] Requirement is grouped by business topic
 - [ ] Raw input is not committed
+- [ ] Interview answers are distilled, not transcribed
 - [ ] Unconfirmed questions are not written into Git
 - [ ] Explicitly unwanted scope is recorded when stable
 - [ ] No project status metadata appears in the file
+- [ ] User is asked whether to continue with `rco-define-goal` or run `rco-create-pr`
