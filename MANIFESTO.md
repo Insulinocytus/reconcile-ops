@@ -76,8 +76,6 @@ Release
 
 每个 Goal、PR、决策都需要识别它影响了哪些 Scope。影响某个 Scope 的变更，就应该让对应 Scope 的人拥有 review、approve、block、escalate 的权力。
 
-每个 Goal、PR、决策都需要识别它影响了哪些 Scope。影响某个 Scope 的变更，就应该让对应 Scope 的人拥有 review、approve、block、escalate 的权力。
-
 Scope 和 reviewer 不应该只依赖 AI 临场判断。项目内的硬性规定应该落地为 repo 中的 agent skill、agent prompt、配置文件或其他可审查的项目文件。例如，某些目录变更必须加入某类 reviewer，某些 Goal 文件变更必须加入 Goal Decision Owner，某些 workflow 变更必须加入 Release Owner。
 
 AI 的职责不是替团队发明责任结构，而是读取这些项目内规定，结合 PR diff 和元数据做归整。如果规定覆盖不了某个变更，AI 应该提出警告，让人类确认或补充规则。
