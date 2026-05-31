@@ -38,6 +38,23 @@ or other GitHub Project metadata.
 - Goal documents are verifiable delivery goals, not tickets or project status records.
 - Spec documents are code foundation designs, not implementation tasks, tickets, or project status records.
 
+## Language
+
+- `.reconcile-ops/config.json` stores the preferred ReconcileOps language.
+- The config shape is:
+
+```json
+{
+  "preferred_language": "en"
+}
+```
+
+- Supported language values are `en`, `zh`, and `jp`.
+- Every issue, PR, document, and other user-facing artifact created through an `rco-*` skill must use the language specified by `.reconcile-ops/config.json`.
+- Every `rco-*` skill must read `.reconcile-ops/config.json` before creating user-facing output.
+- Top-level files under `.reconcile-ops/examples/*.md` are language symlinks managed by `rco-setup`.
+- Language-specific examples live under `.reconcile-ops/examples/<language>/`.
+
 ## Specs
 
 - Specs live under `docs/specs/`.
