@@ -29,10 +29,36 @@ or other GitHub Project metadata.
 
 ## Git-Tracked Documents
 
-- Git stores durable artifacts only: rules, examples, requirements, Goals, and issue mappings.
+- Git stores durable artifacts only: rules, examples, requirements, goals, specs, and issue mappings.
 - Git must not store project status, owner, milestone, priority, or progress.
 - Raw client input must not be committed.
 - Unconfirmed questions must not be committed.
 - Explicitly rejected or excluded client requests must be recorded when they are stable.
 - Requirement documents are cleaned requirement packages, not raw transcripts.
 - Goal documents are verifiable delivery goals, not tickets or project status records.
+- Spec documents are code foundation designs, not implementation tasks, tickets, or project status records.
+
+## Specs
+
+- Specs live under `docs/specs/`.
+- Use `specs` because the repository already uses plural document roots such as `docs/requirements/` and `docs/goals/`.
+- Specs are organized by business logic area, then by specific capability or flow.
+- Spec paths use this shape:
+
+```txt
+docs/specs/<business-area>/<capability-or-flow>.md
+```
+
+- Example paths:
+
+```txt
+docs/specs/auth/login.md
+docs/specs/auth/logout.md
+docs/specs/billing/invoice-generation.md
+```
+
+- A spec must be grounded in one or more requirements or goals.
+- Requirement and Goal references in specs must use Markdown relative links.
+- A spec should describe the baseline design needed before coding, including behavior, boundaries, interfaces, data contracts, validation rules, error handling, and verification approach when relevant.
+- A spec must not contain project status, owner, milestone, priority, progress, created time, or updated time.
+- A spec must not contain unconfirmed questions or raw client input.
