@@ -34,11 +34,23 @@ folder.
 - Do not create or overwrite language-specific example content.
 - `config.json` stores only `preferred_language`.
 - Supported language values are `en`, `zh`, and `jp`.
+- Do not overwrite an existing `.reconcile-ops/` directory.
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/RULE.md`.
-2. Check required tools and install only missing tools:
+1. Ensure `.reconcile-ops/` exists in the project root. If it does not exist, copy it from the skill assets:
+
+```bash
+if [ ! -d ".reconcile-ops" ]; then
+  cp -r skills/rco-setup/assets/.reconcile-ops ./
+  echo "copied: skills/rco-setup/assets/.reconcile-ops -> .reconcile-ops"
+else
+  echo "ok: .reconcile-ops already exists"
+fi
+```
+
+2. Read `.reconcile-ops/RULE.md`.
+3. Check required tools and install only missing tools:
 
 ```bash
 for tool in gh jq rg curl mise; do
@@ -51,7 +63,7 @@ for tool in gh jq rg curl mise; do
 done
 ```
 
-3. Ensure `mise` is initialized in `~/.zshrc`. Append the activation line only when it is missing:
+4. Ensure `mise` is initialized in `~/.zshrc`. Append the activation line only when it is missing:
 
 ```bash
 if ! grep -Fxq 'eval "$(mise activate zsh)"' "$HOME/.zshrc" 2>/dev/null; then
@@ -62,22 +74,22 @@ else
 fi
 ```
 
-4. Ask the user for one language value if they did not already specify it: `en`, `zh`, or `jp`.
-5. Confirm the selected language example directory exists. If it does not exist, stop and report that the repository is incomplete:
+5. Ask the user for one language value if they did not already specify it: `en`, `zh`, or `jp`.
+6. Confirm the selected language example directory exists. If it does not exist, stop and report that the repository is incomplete:
 
 ```bash
 language="en"
 test -d ".reconcile-ops/examples/$language"
 ```
 
-6. Write `.reconcile-ops/config.json` with the selected language:
+7. Write `.reconcile-ops/config.json` with the selected language:
 
 ```bash
 language="en"
 printf '{\n  "preferred_language": "%s"\n}\n' "$language" > .reconcile-ops/config.json
 ```
 
-7. Refresh top-level example symlinks for the selected language. Symlink targets must be relative paths:
+8. Refresh top-level example symlinks for the selected language. Symlink targets must be relative paths:
 
 ```bash
 language="en"
@@ -99,8 +111,8 @@ for file in requirement.md goal.md goal-issue.md pr.md spec.md; do
 done
 ```
 
-8. Verify `.reconcile-ops/config.json` contains only `preferred_language`.
-9. Verify `.reconcile-ops/examples/*.md` are symlinks to `.reconcile-ops/examples/<language>/*.md`.
+9. Verify `.reconcile-ops/config.json` contains only `preferred_language`.
+10. Verify `.reconcile-ops/examples/*.md` are symlinks to `.reconcile-ops/examples/<language>/*.md`.
 
 ## Implementation Templates
 
@@ -133,7 +145,7 @@ Expected example layout:
 
 ## Bundled Resources
 
-This skill has no bundled scripts. Run the commands in `Standard Workflow` directly from the repository root.
+- `skills/rco-setup/assets/.reconcile-ops/`: Complete `.reconcile-ops/` directory containing `RULE.md`, `GOAL_ISSUE_MAP.json`, `config.json`, and `examples/`. Copied to the project root when `.reconcile-ops/` does not already exist.
 
 ## Agent Feedback Loop
 
@@ -150,9 +162,11 @@ to be created.
 | "Rewrite example files directly." | Point top-level examples to language folders with symlinks. |
 | "Store more config now." | `config.json` stores only `preferred_language` for v1. |
 | "Run non-idempotent commands." | Check the current state first and skip already-correct steps. |
+| "Overwrite .reconcile-ops/ to update it." | Do not overwrite an existing `.reconcile-ops/` directory. |
 
 ## Red Flags
 
+- Setup overwrites an existing `.reconcile-ops/` directory
 - Setup creates or overwrites files under `.reconcile-ops/examples/en`, `zh`, or `jp`
 - `.reconcile-ops/config.json` contains fields other than `preferred_language`
 - `mise` is installed but `~/.zshrc` is missing the exact line `eval "$(mise activate zsh)"`
@@ -163,6 +177,7 @@ to be created.
 
 ## Verification
 
+- [ ] `.reconcile-ops/` exists in the project root (copied from assets if missing)
 - [ ] `.reconcile-ops/RULE.md` was read
 - [ ] `gh`, `jq`, `rg`, `curl`, and `mise` are installed or confirmed present
 - [ ] `~/.zshrc` contains the exact line `eval "$(mise activate zsh)"`
