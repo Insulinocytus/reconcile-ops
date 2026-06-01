@@ -29,6 +29,7 @@ what the client explicitly does not want, and stable constraints.
 - Keep requirement files business-topic level, not one file per sentence or source.
 - Do not create Goals in this skill.
 - If no input is provided, list supported formats and offer interview-style intake before proceeding.
+- When multiple sources provide conflicting requirements, do not resolve the conflict by assumption. Ask the user to confirm which intent takes priority.
 - All user-facing output must use the `preferred_language` from `.reconcile-ops/config.json`.
 
 ## Standard Workflow
@@ -37,17 +38,14 @@ what the client explicitly does not want, and stable constraints.
 2. Read `.reconcile-ops/examples/requirement.md` for structure only.
 3. If no input was provided, list the supported input formats (meeting notes, STT transcripts, Notion pages, Slack messages, emails, client feedback) and offer interview-style intake. Do not proceed without input.
 4. Review the provided messy input.
-5. If the user requests interview-style intake, ask one focused question at a time until there is enough stable content to write the requirement document.
-6. Identify the business topic and choose a kebab-case file name under `docs/requirements/`.
-7. Write only stable content into the requirement document:
-   - `Context`
-   - `Client Wants`
-   - `Client Does Not Want`
-   - `Constraints`
-8. Keep unresolved questions out of the file.
-9. Report unresolved questions in the final response as PM follow-up items.
-10. Verify the output contains no status metadata, internal IDs, timestamps, raw transcript, interview transcript, or source dump.
-11. Ask the user whether to continue directly with `rco-define-goal` or run `rco-create-pr` first.
+5. If the input from multiple sources contains conflicting requirements, stop and ask the user which intent takes priority. Do not silently resolve conflicts.
+6. If the user requests interview-style intake, ask one focused question at a time until there is enough stable content to write the requirement document.
+7. Identify the business topic and choose a kebab-case file name under `docs/requirements/`.
+8. Write only stable content into the requirement document:
+9. Keep unresolved questions out of the file.
+10. Report unresolved questions in the final response as PM follow-up items.
+11. Verify the output contains no status metadata, internal IDs, timestamps, raw transcript, interview transcript, or source dump.
+12. Ask the user whether to continue directly with `rco-define-goal` or run `rco-create-pr` first.
 
 ## Implementation Templates
 
@@ -103,6 +101,7 @@ content remains.
 - The output includes Goal IDs
 - Agent proceeds when `.reconcile-ops/config.json` is missing without telling the user to run `rco-setup`
 - Agent proceeds without input and does not prompt for supported formats
+- Conflicting requirements are resolved without user confirmation
 
 ## Verification
 
@@ -117,3 +116,4 @@ content remains.
 - [ ] No project status metadata appears in the file
 - [ ] User is asked whether to continue with `rco-define-goal` or run `rco-create-pr`
 - [ ] When no input was provided, supported formats were listed and interview offered
+- [ ] Conflicting requirements were escalated to the user instead of silently resolved

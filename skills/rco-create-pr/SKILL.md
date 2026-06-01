@@ -26,6 +26,7 @@ types. The description is generated from the actual changed files.
 - Describe what changed based on file paths.
 - Do not write project status metadata into Git documents.
 - Keep PR descriptions factual and review-oriented.
+- When a PR relates to a Goal, update the corresponding GitHub issue body with the PR link.
 - All user-facing output must use the `preferred_language` from `.reconcile-ops/config.json`.
 
 ## Standard Workflow
@@ -40,10 +41,11 @@ types. The description is generated from the actual changed files.
    - `.reconcile-ops/examples/**`: example structure changes
    - `.reconcile-ops/GOAL_ISSUE_MAP.json`: issue mapping changes
 5. Read `branch_prefix` from `.reconcile-ops/config.json`. If the key is absent, stop and tell the user to run `rco-setup` first. Create a branch with that prefix unless the user requests another prefix.
-6. Stage only the files relevant to the ReconcileOps change.
+6. Stage the changed files.
 7. Commit with a concise message.
 8. Create the PR with a description based on `.reconcile-ops/examples/pr.md`.
-9. Report the PR URL and changed files.
+9. If the changed files include `docs/goals/G-*.md`, look up the corresponding issue in `.reconcile-ops/GOAL_ISSUE_MAP.json` and append the PR link to the issue body under the PRs section.
+10. Report the PR URL and changed files.
 
 ## Implementation Templates
 
@@ -73,6 +75,9 @@ git switch -c <branch_prefix><short-topic>
 git add <files>
 git commit -m "<message>"
 gh pr create --title "<title>" --body-file <body-file>
+gh issue edit <issue-number> --body "$(gh issue view <issue-number> --json body -q .body)
+
+- <pr-url>"
 ```
 
 ## Bundled Resources
@@ -81,15 +86,15 @@ gh pr create --title "<title>" --body-file <body-file>
 
 ## Agent Feedback Loop
 
-If unrelated local changes exist, do not stage them. If relevant files contain status metadata,
-stop and fix the documents before creating the PR.
+If relevant files contain status metadata, stop and fix the documents before creating the PR.
+If the issue update fails because the issue does not exist yet, report the missing issue and continue
+without blocking the PR creation.
 
 ## Common Rationalizations
 
 | Rationalization | Correct Response |
 | --- | --- |
 | "This is a Goal PR." | PRs have no ReconcileOps type; describe changed files. |
-| "Stage everything." | Stage only files relevant to the requested PR. |
 | "The PR should include status." | Status belongs in GitHub Project metadata. |
 | "The examples are templates." | Examples guide structure; generated PR text should reflect actual changes. |
 
@@ -97,7 +102,6 @@ stop and fix the documents before creating the PR.
 
 - User is asked to choose a PR type
 - PR description is generic and does not mention changed paths
-- Unrelated files are staged
 - PR body contains milestone, owner, priority, or progress as Git-managed state
 - Requirement or Goal files contain status metadata
 - Agent proceeds when `.reconcile-ops/config.json` is missing without telling the user to run `rco-setup`
@@ -109,6 +113,6 @@ stop and fix the documents before creating the PR.
 - [ ] Changed files were inspected
 - [ ] PR description was generated from file paths
 - [ ] No PR type was requested or recorded
-- [ ] Only relevant files were staged
 - [ ] `branch_prefix` was read from `.reconcile-ops/config.json`
+- [ ] If Goals changed, corresponding issues were updated with the PR link
 - [ ] PR review notes are factual and path-driven

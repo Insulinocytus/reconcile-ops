@@ -1,6 +1,6 @@
-<!-- Example only: this file uses todo login behavior as sample content. Reference the structure only. -->
+<!-- Example only: this file uses todo CRUD behavior as sample content. Reference the structure only. -->
 
-# Spec: Auth Login
+# Spec: Todo Item CRUD
 
 ## Source Documents
 
@@ -9,48 +9,56 @@
 
 ## Purpose
 
-Define the baseline design for login behavior before implementation. This spec focuses on the code-level design needed to support authentication entry points, validation, session creation, and user-facing errors.
+Define the baseline design for todo item creation, completion, and deletion before implementation. This spec focuses on the code-level design needed to support item entry, state transitions, removal, and user-facing feedback.
 
 ## Behavior
 
-- Users submit an email and password from the login form.
-- The system validates that both fields are present before calling the authentication service.
-- The authentication service verifies credentials and returns an authenticated session when valid.
-- Invalid credentials return a generic login error.
-- Successful login redirects the user to the todo list.
+- A user submits a short title to create a new todo item.
+- The system validates that the title is non-empty before persisting the item.
+- A user can mark an existing todo item as completed.
+- A user can delete an existing todo item.
+- Deleted items are removed from the active list.
 
 ## Boundaries
 
-- The login flow owns form validation, authentication request handling, session creation, and redirect behavior.
-- The login flow does not own registration, password reset, team membership, or account administration.
+- The todo CRUD flow owns item creation, completion toggling, deletion, and in-memory or persisted storage.
+- The todo CRUD flow does not own user accounts, team sharing, due dates, reminders, or calendar integration.
 
 ## Interfaces
 
-- `POST /login`
-  - Input: email and password.
-  - Success: authenticated session and redirect target.
-  - Failure: generic authentication error.
+- `POST /todos`
+  - Input: title string.
+  - Success: created todo item with generated id.
+  - Failure: validation error when title is empty.
+- `PATCH /todos/{id}`
+  - Input: completed boolean.
+  - Success: updated todo item.
+  - Failure: not-found error when id does not exist.
+- `DELETE /todos/{id}`
+  - Success: confirmation of deletion.
+  - Failure: not-found error when id does not exist.
 
 ## Data Contracts
 
-- Login input requires a non-empty email and password.
-- The session contract must identify the authenticated user without exposing password data.
+- Todo item requires a non-empty title string.
+- Todo item has a generated unique id, a completed boolean defaulting to false, and a created-at timestamp.
+- Completed and deleted states are mutually exclusive: an item cannot be completed and deleted simultaneously.
 
 ## Validation Rules
 
-- Email is required.
-- Password is required.
-- Failed authentication must not reveal whether the email exists.
+- Title is required and must not be empty or whitespace-only.
+- Toggle and delete operations require a valid existing item id.
 
 ## Error Handling
 
-- Missing fields show field-level validation errors.
-- Invalid credentials show one generic login failure message.
-- Unexpected authentication service errors return a safe generic error and should be observable by application logging.
+- Empty title shows a validation error.
+- Operations on non-existent item ids return a not-found error.
+- Unexpected persistence errors return a safe generic error and should be observable by application logging.
 
 ## Verification Approach
 
-- Verify missing email and password produce validation errors.
-- Verify invalid credentials do not create a session.
-- Verify valid credentials create a session and redirect to the todo list.
-- Verify login errors do not reveal whether an account exists.
+- Verify empty title produces a validation error.
+- Verify creating an item with a valid title persists the item.
+- Verify toggling completed changes the item state.
+- Verify deleting an item removes it from the active list.
+- Verify operations on non-existent ids return not-found errors.

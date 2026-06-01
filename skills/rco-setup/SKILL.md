@@ -31,8 +31,8 @@ folder.
 - Keep setup idempotent.
 - Skip steps that already satisfy the expected state.
 - Do not create or overwrite language-specific example content.
-- `config.json` stores only `preferred_language` and `branch_prefix`.
-- Supported language values are `en`, `zh`, and `jp`.
+- `config.json` stores `preferred_language`, `branch_prefix`, `github_project_url`, and `github_project_id`.
+- Supported language values are `en`, `zh`, and `ja`.
 - Do not overwrite an existing `.reconcile-ops/` directory.
 - `preferred_language` in `config.json` drives the output language for all `rco-*` skills.
 
@@ -74,7 +74,7 @@ else
 fi
 ```
 
-5. Ask the user for one language value if they did not already specify it: `en`, `zh`, or `jp`.
+5. Ask the user for one language value if they did not already specify it: `en`, `zh`, or `ja`.
 6. Ask the user for a branch prefix if they did not already specify one. Default: `ai/`. The prefix must end with `/`.
 7. Confirm the selected language example directory exists. If it does not exist, stop and report that the repository is incomplete:
 
@@ -83,15 +83,21 @@ language="en"
 test -d ".reconcile-ops/examples/$language"
 ```
 
-8. Write `.reconcile-ops/config.json` with the selected language and branch prefix:
+8. Ask the user for a GitHub Project URL if they did not already specify one and `github_project_url` is empty in the config. If provided, resolve the project ID using `gh`:
 
 ```bash
-language="en"
-branch_prefix="ai/"
-printf '{\n  "preferred_language": "%s",\n  "branch_prefix": "%s"\n}\n' "$language" "$branch_prefix" > .reconcile-ops/config.json
+gh project view --owner <org-or-user> --format json --jq '.id' <project-number>
 ```
 
-9. Refresh top-level example symlinks for the selected language. Symlink targets must be relative paths:
+If the user does not have a GitHub Project, leave `github_project_url` and `github_project_id` empty. The user can add this later by re-running setup.
+
+9. Write `.reconcile-ops/config.json` with the selected language, branch prefix, and project info:
+
+```bash
+printf '{\n  "preferred_language": "%s",\n  "branch_prefix": "%s",\n  "github_project_url": "%s",\n  "github_project_id": "%s"\n}\n' "$language" "$branch_prefix" "$project_url" "$project_id" > .reconcile-ops/config.json
+```
+
+10. Refresh top-level example symlinks for the selected language. Symlink targets must be relative paths:
 
 ```bash
 language="en"
@@ -113,8 +119,8 @@ for file in requirement.md goal.md goal-issue.md pr.md spec.md; do
 done
 ```
 
-10. Verify `.reconcile-ops/config.json` contains only `preferred_language` and `branch_prefix`.
-11. Verify `.reconcile-ops/examples/*.md` are symlinks to `.reconcile-ops/examples/<language>/*.md`.
+11. Verify `.reconcile-ops/config.json` contains `preferred_language`, `branch_prefix`, `github_project_url`, and `github_project_id`.
+12. Verify `.reconcile-ops/examples/*.md` are symlinks to `.reconcile-ops/examples/<language>/*.md`.
 
 ## Implementation Templates
 
@@ -123,7 +129,9 @@ Config shape:
 ```json
 {
   "preferred_language": "en",
-  "branch_prefix": "ai/"
+  "branch_prefix": "ai/",
+  "github_project_url": "https://github.com/orgs/OWNER/projects/1",
+  "github_project_id": "PVT_xxxxx"
 }
 ```
 
@@ -138,7 +146,7 @@ Expected example layout:
     pr.md
     spec.md
   zh/
-  jp/
+  ja/
   requirement.md -> en/requirement.md
   goal.md -> en/goal.md
   goal-issue.md -> en/goal-issue.md
@@ -163,20 +171,20 @@ to be created.
 | --- | --- |
 | "The tools are probably installed." | Check each tool and skip only confirmed installed tools. |
 | "Rewrite example files directly." | Point top-level examples to language folders with symlinks. |
-| "Store more config now." | `config.json` stores only `preferred_language` and `branch_prefix` for v1. |
+| "Store more config now." | `config.json` stores `preferred_language`, `branch_prefix`, `github_project_url`, and `github_project_id` for v1. |
 | "Run non-idempotent commands." | Check the current state first and skip already-correct steps. |
 | "Overwrite .reconcile-ops/ to update it." | Do not overwrite an existing `.reconcile-ops/` directory. |
 
 ## Red Flags
 
 - Setup overwrites an existing `.reconcile-ops/` directory
-- Setup creates or overwrites files under `.reconcile-ops/examples/en`, `zh`, or `jp`
-- `.reconcile-ops/config.json` contains fields other than `preferred_language` and `branch_prefix`
+- Setup creates or overwrites files under `.reconcile-ops/examples/en`, `zh`, or `ja`
+- `.reconcile-ops/config.json` contains fields other than `preferred_language`, `branch_prefix`, `github_project_url`, and `github_project_id`
 - `mise` is installed but `~/.zshrc` is missing the exact line `eval "$(mise activate zsh)"`
 - Setup appends duplicate `mise` initialization lines to `~/.zshrc`
 - Top-level `.reconcile-ops/examples/*.md` are regular files instead of symlinks
 - Setup creates duplicate or nested example files
-- The selected language is not `en`, `zh`, or `jp`
+- The selected language is not `en`, `zh`, or `ja`
 
 ## Verification
 
@@ -185,8 +193,8 @@ to be created.
 - [ ] `gh`, `jq`, `rg`, `curl`, and `mise` are installed or confirmed present
 - [ ] `~/.zshrc` contains the exact line `eval "$(mise activate zsh)"`
 - [ ] `.reconcile-ops/config.json` exists
-- [ ] `.reconcile-ops/config.json` contains only `preferred_language` and `branch_prefix`
-- [ ] `preferred_language` is `en`, `zh`, or `jp`
+- [ ] `.reconcile-ops/config.json` contains `preferred_language`, `branch_prefix`, `github_project_url`, and `github_project_id`
+- [ ] `preferred_language` is `en`, `zh`, or `ja`
 - [ ] `branch_prefix` ends with `/`
 - [ ] Selected language directory exists under `.reconcile-ops/examples/`
 - [ ] Top-level example markdown files are relative symlinks to the selected language folder

@@ -128,7 +128,7 @@ docs/specs/billing/invoice-generation.md
 
 ## Bundled Resources
 
-- `.reconcile-ops/examples/spec.md`: Example spec using todo login behavior. Reference the structure only.
+- `.reconcile-ops/examples/spec.md`: Example spec using todo CRUD behavior. Reference the structure only.
 
 ## Agent Feedback Loop
 
