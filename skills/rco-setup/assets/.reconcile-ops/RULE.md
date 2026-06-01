@@ -45,7 +45,8 @@ or other GitHub Project metadata.
 
 ```json
 {
-  "preferred_language": "en"
+  "preferred_language": "en",
+  "branch_prefix": "ai/"
 }
 ```
 

@@ -5,7 +5,7 @@ description: Set up ReconcileOps repository prerequisites and language configura
 
 # RCO Setup
 
-Before doing any work, read `.reconcile-ops/RULE.md`.
+Before doing any work, read `.reconcile-ops/RULE.md` if it exists.
 
 ## Overview
 
@@ -27,7 +27,7 @@ folder.
 
 ## Core Principles
 
-- Read `.reconcile-ops/RULE.md` before doing any work.
+- Read `.reconcile-ops/RULE.md` before doing any work, if it exists.
 - Execute the setup commands directly and verify each result.
 - Keep setup idempotent.
 - Skip steps that already satisfy the expected state.
@@ -49,7 +49,7 @@ else
 fi
 ```
 
-2. Read `.reconcile-ops/RULE.md`.
+2. Read `.reconcile-ops/RULE.md` if it exists.
 3. Check required tools and install only missing tools:
 
 ```bash
@@ -83,7 +83,7 @@ language="en"
 test -d ".reconcile-ops/examples/$language"
 ```
 
-7. Write `.reconcile-ops/config.json` with the selected language and branch prefix:
+8. Write `.reconcile-ops/config.json` with the selected language and branch prefix:
 
 ```bash
 language="en"
@@ -91,7 +91,7 @@ branch_prefix="ai/"
 printf '{\n  "preferred_language": "%s",\n  "branch_prefix": "%s"\n}\n' "$language" "$branch_prefix" > .reconcile-ops/config.json
 ```
 
-8. Refresh top-level example symlinks for the selected language. Symlink targets must be relative paths:
+9. Refresh top-level example symlinks for the selected language. Symlink targets must be relative paths:
 
 ```bash
 language="en"
@@ -113,8 +113,8 @@ for file in requirement.md goal.md goal-issue.md pr.md spec.md; do
 done
 ```
 
-9. Verify `.reconcile-ops/config.json` contains only `preferred_language` and `branch_prefix`.
-10. Verify `.reconcile-ops/examples/*.md` are symlinks to `.reconcile-ops/examples/<language>/*.md`.
+10. Verify `.reconcile-ops/config.json` contains only `preferred_language` and `branch_prefix`.
+11. Verify `.reconcile-ops/examples/*.md` are symlinks to `.reconcile-ops/examples/<language>/*.md`.
 
 ## Implementation Templates
 
@@ -181,7 +181,7 @@ to be created.
 ## Verification
 
 - [ ] `.reconcile-ops/` exists in the project root (copied from assets if missing)
-- [ ] `.reconcile-ops/RULE.md` was read
+- [ ] `.reconcile-ops/RULE.md` was read if it existed
 - [ ] `gh`, `jq`, `rg`, `curl`, and `mise` are installed or confirmed present
 - [ ] `~/.zshrc` contains the exact line `eval "$(mise activate zsh)"`
 - [ ] `.reconcile-ops/config.json` exists

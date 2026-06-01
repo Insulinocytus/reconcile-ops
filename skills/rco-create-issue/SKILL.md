@@ -5,7 +5,7 @@ description: Create missing GitHub issues for ReconcileOps Goal files. Use when 
 
 # RCO Create Issue
 
-Before doing any work, read `.reconcile-ops/RULE.md`.
+Before doing any work, read `.reconcile-ops/RULE.md`. If the file does not exist, stop and tell the user to run `rco-setup` first.
 
 ## Overview
 
@@ -20,7 +20,7 @@ GitHub Project entry point. Git stores only the Goal-to-issue mapping, not Proje
 
 ## Core Principles
 
-- Read `.reconcile-ops/RULE.md` before doing any work.
+- Read `.reconcile-ops/RULE.md` before doing any work. If it does not exist, stop and tell the user to run `rco-setup` first.
 - Issue title format is `[G-000001] Goal Title`.
 - Issue body contains only a default-branch link to the Goal file.
 - Do not update issue content, close issues, or sync Project status in v1.
@@ -28,7 +28,7 @@ GitHub Project entry point. Git stores only the Goal-to-issue mapping, not Proje
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/RULE.md`.
+1. Read `.reconcile-ops/RULE.md`. If it does not exist, stop and tell the user to run `rco-setup` first.
 2. Read `.reconcile-ops/examples/goal-issue.md` for structure only.
 3. Scan `docs/goals/` or the user-provided Goal folder.
 4. For each `G-*.md`, parse the first heading:
@@ -82,10 +82,12 @@ stop and ask for the missing repository or project information. Do not guess a r
 - `.reconcile-ops/GOAL_ISSUE_MAP.json` contains status, owner, milestone, or priority
 - Existing issue content is edited
 - Duplicate issue is created for the same Goal ID
+- Agent proceeds when `.reconcile-ops/RULE.md` is missing without telling the user to run `rco-setup`
 
 ## Verification
 
 - [ ] `.reconcile-ops/RULE.md` was read
+- [ ] If `.reconcile-ops/RULE.md` was missing, user was told to run `rco-setup`
 - [ ] Goal ID and title were parsed from the Goal heading
 - [ ] Existing issues were checked before creation
 - [ ] Created issue title uses `[G-000001] Goal Title`

@@ -5,7 +5,7 @@ description: Create a pull request for ReconcileOps document, rule, example, or 
 
 # RCO Create PR
 
-Before doing any work, read `.reconcile-ops/RULE.md`.
+Before doing any work, read `.reconcile-ops/RULE.md`. If the file does not exist, stop and tell the user to run `rco-setup` first.
 
 ## Overview
 
@@ -22,7 +22,7 @@ types. The description is generated from the actual changed files.
 
 ## Core Principles
 
-- Read `.reconcile-ops/RULE.md` before doing any work.
+- Read `.reconcile-ops/RULE.md` before doing any work. If it does not exist, stop and tell the user to run `rco-setup` first.
 - Do not ask the user to choose a PR type.
 - Describe what changed based on file paths.
 - Do not write project status metadata into Git documents.
@@ -30,7 +30,7 @@ types. The description is generated from the actual changed files.
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/RULE.md`.
+1. Read `.reconcile-ops/RULE.md`. If it does not exist, stop and tell the user to run `rco-setup` first.
 2. Read `.reconcile-ops/examples/pr.md` for structure only.
 3. Inspect changed files with `git status --short`.
 4. Build a PR summary from paths:
@@ -100,10 +100,12 @@ stop and fix the documents before creating the PR.
 - Unrelated files are staged
 - PR body contains milestone, owner, priority, or progress as Git-managed state
 - Requirement or Goal files contain status metadata
+- Agent proceeds when `.reconcile-ops/RULE.md` is missing without telling the user to run `rco-setup`
 
 ## Verification
 
 - [ ] `.reconcile-ops/RULE.md` was read
+- [ ] If `.reconcile-ops/RULE.md` was missing, user was told to run `rco-setup`
 - [ ] Changed files were inspected
 - [ ] PR description was generated from file paths
 - [ ] No PR type was requested or recorded

@@ -5,7 +5,7 @@ description: Define verifiable ReconcileOps Goals from cleaned requirement docum
 
 # RCO Define Goal
 
-Before doing any work, read `.reconcile-ops/RULE.md`.
+Before doing any work, read `.reconcile-ops/RULE.md`. If the file does not exist, stop and tell the user to run `rco-setup` first.
 
 ## Overview
 
@@ -22,7 +22,7 @@ It is not a GitHub Project issue and must not contain status metadata.
 
 ## Core Principles
 
-- Read `.reconcile-ops/RULE.md` before doing any work.
+- Read `.reconcile-ops/RULE.md` before doing any work. If it does not exist, stop and tell the user to run `rco-setup` first.
 - Do not write project status, owner, milestone, priority, progress, timestamps, or open questions.
 - Do not create a Goal when requirements are too ambiguous to verify.
 - Use Markdown relative links in `Source Requirements`.
@@ -31,7 +31,7 @@ It is not a GitHub Project issue and must not contain status metadata.
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/RULE.md`.
+1. Read `.reconcile-ops/RULE.md`. If it does not exist, stop and tell the user to run `rco-setup` first.
 2. Read `.reconcile-ops/examples/goal.md` for structure only.
 3. Read the source requirement file or files.
 4. Decide whether the requirement content is stable enough to produce a verifiable Goal.
@@ -117,10 +117,12 @@ Git unchanged unless another Goal can be safely defined.
 - Goal ID is reused
 - `Source Requirements` are plain text paths instead of Markdown links
 - Acceptance criteria are vague or unverifiable
+- Agent proceeds when `.reconcile-ops/RULE.md` is missing without telling the user to run `rco-setup`
 
 ## Verification
 
 - [ ] `.reconcile-ops/RULE.md` was read
+- [ ] If `.reconcile-ops/RULE.md` was missing, user was told to run `rco-setup`
 - [ ] Output path is `docs/goals/G-*.md`
 - [ ] Goal ID is next greater observed ID
 - [ ] Goal ID was not reused

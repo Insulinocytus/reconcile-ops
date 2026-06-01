@@ -15,7 +15,6 @@ ReconcileOps的整套系统，必须能解决或大幅缓解以下问题。
 
 rco-setup的验收标准
 
-- 技能执行后会先立马阅读RULE.md
 - 技能必须具有幂等性：重新执行时所有已满足的步骤必须跳过，不可重复执行
 - 若.reconcile-ops/不存在，从skills/rco-setup/assets/.reconcile-ops/复制；若已存在则不可覆盖
 - 必须逐个检查各类工具是否已安装，仅安装缺失的工具，不可跳过检查直接安装

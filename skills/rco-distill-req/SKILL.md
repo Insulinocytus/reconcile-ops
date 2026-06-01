@@ -5,7 +5,7 @@ description: Distill messy client input or interview-style Q&A into a cleaned Re
 
 # RCO Distill Requirement
 
-Before doing any work, read `.reconcile-ops/RULE.md`.
+Before doing any work, read `.reconcile-ops/RULE.md`. If the file does not exist, stop and tell the user to run `rco-setup` first.
 
 ## Overview
 
@@ -23,29 +23,31 @@ what the client explicitly does not want, and stable constraints.
 
 ## Core Principles
 
-- Read `.reconcile-ops/RULE.md` before doing any work.
+- Read `.reconcile-ops/RULE.md` before doing any work. If it does not exist, stop and tell the user to run `rco-setup` first.
 - Do not commit raw client input.
 - Do not write unconfirmed questions into Git.
 - Record explicitly unwanted scope when it is stable.
 - Keep requirement files business-topic level, not one file per sentence or source.
 - Do not create Goals in this skill.
+- If no input is provided, list supported formats and offer interview-style intake before proceeding.
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/RULE.md`.
+1. Read `.reconcile-ops/RULE.md`. If it does not exist, stop and tell the user to run `rco-setup` first.
 2. Read `.reconcile-ops/examples/requirement.md` for structure only.
-3. Review the provided messy input.
-4. If the user requests interview-style intake, ask one focused question at a time until there is enough stable content to write the requirement document.
-5. Identify the business topic and choose a kebab-case file name under `docs/requirements/`.
-6. Write only stable content into the requirement document:
+3. If no input was provided, list the supported input formats (meeting notes, STT transcripts, Notion pages, Slack messages, emails, client feedback) and offer interview-style intake. Do not proceed without input.
+4. Review the provided messy input.
+5. If the user requests interview-style intake, ask one focused question at a time until there is enough stable content to write the requirement document.
+6. Identify the business topic and choose a kebab-case file name under `docs/requirements/`.
+7. Write only stable content into the requirement document:
    - `Context`
    - `Client Wants`
    - `Client Does Not Want`
    - `Constraints`
-7. Keep unresolved questions out of the file.
-8. Report unresolved questions in the final response as PM follow-up items.
-9. Verify the output contains no status metadata, internal IDs, timestamps, raw transcript, interview transcript, or source dump.
-10. Ask the user whether to continue directly with `rco-define-goal` or run `rco-create-pr` first.
+8. Keep unresolved questions out of the file.
+9. Report unresolved questions in the final response as PM follow-up items.
+10. Verify the output contains no status metadata, internal IDs, timestamps, raw transcript, interview transcript, or source dump.
+11. Ask the user whether to continue directly with `rco-define-goal` or run `rco-create-pr` first.
 
 ## Implementation Templates
 
@@ -99,10 +101,13 @@ content remains.
 - File contains open questions or unresolved assumptions
 - Requirement file is named after a meeting date instead of a business topic
 - The output includes Goal IDs
+- Agent proceeds when `.reconcile-ops/RULE.md` is missing without telling the user to run `rco-setup`
+- Agent proceeds without input and does not prompt for supported formats
 
 ## Verification
 
 - [ ] `.reconcile-ops/RULE.md` was read
+- [ ] If `.reconcile-ops/RULE.md` was missing, user was told to run `rco-setup`
 - [ ] Output path is `docs/requirements/<business-topic>.md`
 - [ ] Requirement is grouped by business topic
 - [ ] Raw input is not committed
@@ -111,3 +116,4 @@ content remains.
 - [ ] Explicitly unwanted scope is recorded when stable
 - [ ] No project status metadata appears in the file
 - [ ] User is asked whether to continue with `rco-define-goal` or run `rco-create-pr`
+- [ ] When no input was provided, supported formats were listed and interview offered

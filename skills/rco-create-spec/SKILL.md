@@ -5,7 +5,7 @@ description: Create ReconcileOps spec documents from requirement or Goal files. 
 
 # RCO Create Spec
 
-Before doing any work, read `.reconcile-ops/RULE.md`.
+Before doing any work, read `.reconcile-ops/RULE.md`. If the file does not exist, stop and tell the user to run `rco-setup` first.
 
 ## Overview
 
@@ -28,7 +28,7 @@ contracts, and frontend guidance for user-facing flows when those concerns are p
 
 ## Core Principles
 
-- Read `.reconcile-ops/RULE.md` before doing any work.
+- Read `.reconcile-ops/RULE.md` before doing any work. If it does not exist, stop and tell the user to run `rco-setup` first.
 - Use `.reconcile-ops/examples/spec.md` for structure only.
 - Ground every spec in one or more requirement or Goal documents.
 - Reference source requirement and Goal files with Markdown relative links.
@@ -41,7 +41,7 @@ contracts, and frontend guidance for user-facing flows when those concerns are p
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/RULE.md`.
+1. Read `.reconcile-ops/RULE.md`. If it does not exist, stop and tell the user to run `rco-setup` first.
 2. Read `.reconcile-ops/examples/spec.md` for structure only.
 3. Read the input requirement or Goal file.
 4. Follow links between requirement and Goal files when available, so the spec is grounded in both business intent and verifiable delivery goals.
@@ -155,10 +155,12 @@ before presenting it.
 - Spec is a task checklist instead of a design document
 - Spec ignores obvious security, API, data, validation, or error-handling concerns
 - Spec path is not under `docs/specs/<business-area>/`
+- Agent proceeds when `.reconcile-ops/RULE.md` is missing without telling the user to run `rco-setup`
 
 ## Verification
 
 - [ ] `.reconcile-ops/RULE.md` was read
+- [ ] If `.reconcile-ops/RULE.md` was missing, user was told to run `rco-setup`
 - [ ] `.reconcile-ops/examples/spec.md` was used only as a structure reference
 - [ ] Output path is `docs/specs/<business-area>/<capability-or-flow>.md`
 - [ ] Source requirement or Goal files are linked with Markdown relative links
