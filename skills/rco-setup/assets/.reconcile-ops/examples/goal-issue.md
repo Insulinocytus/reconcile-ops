@@ -1,1 +1,0 @@
-en/goal-issue.md
