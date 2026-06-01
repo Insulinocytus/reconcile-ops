@@ -5,7 +5,7 @@ description: Distill messy client input or interview-style Q&A into a cleaned Re
 
 # RCO Distill Requirement
 
-Before doing any work, read `.reconcile-ops/RULE.md`. If the file does not exist, stop and tell the user to run `rco-setup` first.
+Before doing any work, read `.reconcile-ops/RULE.md` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
 
 ## Overview
 
@@ -23,7 +23,6 @@ what the client explicitly does not want, and stable constraints.
 
 ## Core Principles
 
-- Read `.reconcile-ops/RULE.md` before doing any work. If it does not exist, stop and tell the user to run `rco-setup` first.
 - Do not commit raw client input.
 - Do not write unconfirmed questions into Git.
 - Record explicitly unwanted scope when it is stable.
@@ -33,7 +32,7 @@ what the client explicitly does not want, and stable constraints.
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/RULE.md`. If it does not exist, stop and tell the user to run `rco-setup` first.
+1. Read `.reconcile-ops/RULE.md` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
 2. Read `.reconcile-ops/examples/requirement.md` for structure only.
 3. If no input was provided, list the supported input formats (meeting notes, STT transcripts, Notion pages, Slack messages, emails, client feedback) and offer interview-style intake. Do not proceed without input.
 4. Review the provided messy input.

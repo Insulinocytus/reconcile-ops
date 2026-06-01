@@ -5,7 +5,7 @@ description: Define verifiable ReconcileOps Goals from cleaned requirement docum
 
 # RCO Define Goal
 
-Before doing any work, read `.reconcile-ops/RULE.md`. If the file does not exist, stop and tell the user to run `rco-setup` first.
+Before doing any work, read `.reconcile-ops/RULE.md` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
 
 ## Overview
 
@@ -22,7 +22,6 @@ It is not a GitHub Project issue and must not contain status metadata.
 
 ## Core Principles
 
-- Read `.reconcile-ops/RULE.md` before doing any work. If it does not exist, stop and tell the user to run `rco-setup` first.
 - Do not write project status, owner, milestone, priority, progress, timestamps, or open questions.
 - Do not create a Goal when requirements are too ambiguous to verify.
 - Use Markdown relative links in `Source Requirements`.
@@ -31,7 +30,7 @@ It is not a GitHub Project issue and must not contain status metadata.
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/RULE.md`. If it does not exist, stop and tell the user to run `rco-setup` first.
+1. Read `.reconcile-ops/RULE.md` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
 2. Read `.reconcile-ops/examples/goal.md` for structure only.
 3. Read the source requirement file or files.
 4. Decide whether the requirement content is stable enough to produce a verifiable Goal.

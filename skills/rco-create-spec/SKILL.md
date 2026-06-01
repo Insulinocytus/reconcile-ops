@@ -5,7 +5,7 @@ description: Create ReconcileOps spec documents from requirement or Goal files. 
 
 # RCO Create Spec
 
-Before doing any work, read `.reconcile-ops/RULE.md`. If the file does not exist, stop and tell the user to run `rco-setup` first.
+Before doing any work, read `.reconcile-ops/RULE.md` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
 
 ## Overview
 
@@ -28,7 +28,6 @@ contracts, and frontend guidance for user-facing flows when those concerns are p
 
 ## Core Principles
 
-- Read `.reconcile-ops/RULE.md` before doing any work. If it does not exist, stop and tell the user to run `rco-setup` first.
 - Use `.reconcile-ops/examples/spec.md` for structure only.
 - Ground every spec in one or more requirement or Goal documents.
 - Reference source requirement and Goal files with Markdown relative links.
@@ -41,7 +40,7 @@ contracts, and frontend guidance for user-facing flows when those concerns are p
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/RULE.md`. If it does not exist, stop and tell the user to run `rco-setup` first.
+1. Read `.reconcile-ops/RULE.md` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
 2. Read `.reconcile-ops/examples/spec.md` for structure only.
 3. Read the input requirement or Goal file.
 4. Follow links between requirement and Goal files when available, so the spec is grounded in both business intent and verifiable delivery goals.

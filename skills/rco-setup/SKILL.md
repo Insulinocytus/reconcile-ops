@@ -5,7 +5,7 @@ description: Set up ReconcileOps repository prerequisites and language configura
 
 # RCO Setup
 
-Before doing any work, read `.reconcile-ops/RULE.md` if it exists.
+Before doing any work, read `.reconcile-ops/RULE.md` if it exists and has not already been read in this session.
 
 ## Overview
 
@@ -27,7 +27,6 @@ folder.
 
 ## Core Principles
 
-- Read `.reconcile-ops/RULE.md` before doing any work, if it exists.
 - Execute the setup commands directly and verify each result.
 - Keep setup idempotent.
 - Skip steps that already satisfy the expected state.
@@ -49,7 +48,7 @@ else
 fi
 ```
 
-2. Read `.reconcile-ops/RULE.md` if it exists.
+2. Read `.reconcile-ops/RULE.md` if it exists and has not already been read in this session.
 3. Check required tools and install only missing tools:
 
 ```bash

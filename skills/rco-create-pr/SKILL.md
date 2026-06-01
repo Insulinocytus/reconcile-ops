@@ -5,7 +5,7 @@ description: Create a pull request for ReconcileOps document, rule, example, or 
 
 # RCO Create PR
 
-Before doing any work, read `.reconcile-ops/RULE.md`. If the file does not exist, stop and tell the user to run `rco-setup` first.
+Before doing any work, read `.reconcile-ops/RULE.md` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
 
 ## Overview
 
@@ -22,7 +22,6 @@ types. The description is generated from the actual changed files.
 
 ## Core Principles
 
-- Read `.reconcile-ops/RULE.md` before doing any work. If it does not exist, stop and tell the user to run `rco-setup` first.
 - Do not ask the user to choose a PR type.
 - Describe what changed based on file paths.
 - Do not write project status metadata into Git documents.
@@ -30,7 +29,7 @@ types. The description is generated from the actual changed files.
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/RULE.md`. If it does not exist, stop and tell the user to run `rco-setup` first.
+1. Read `.reconcile-ops/RULE.md` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
 2. Read `.reconcile-ops/examples/pr.md` for structure only.
 3. Inspect changed files with `git status --short`.
 4. Build a PR summary from paths:
