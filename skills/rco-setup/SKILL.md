@@ -32,7 +32,7 @@ folder.
 - Keep setup idempotent.
 - Skip steps that already satisfy the expected state.
 - Do not create or overwrite language-specific example content.
-- `config.json` stores only `preferred_language`.
+- `config.json` stores only `preferred_language` and `branch_prefix`.
 - Supported language values are `en`, `zh`, and `jp`.
 - Do not overwrite an existing `.reconcile-ops/` directory.
 
@@ -75,18 +75,20 @@ fi
 ```
 
 5. Ask the user for one language value if they did not already specify it: `en`, `zh`, or `jp`.
-6. Confirm the selected language example directory exists. If it does not exist, stop and report that the repository is incomplete:
+6. Ask the user for a branch prefix if they did not already specify one. Default: `ai/`. The prefix must end with `/`.
+7. Confirm the selected language example directory exists. If it does not exist, stop and report that the repository is incomplete:
 
 ```bash
 language="en"
 test -d ".reconcile-ops/examples/$language"
 ```
 
-7. Write `.reconcile-ops/config.json` with the selected language:
+7. Write `.reconcile-ops/config.json` with the selected language and branch prefix:
 
 ```bash
 language="en"
-printf '{\n  "preferred_language": "%s"\n}\n' "$language" > .reconcile-ops/config.json
+branch_prefix="ai/"
+printf '{\n  "preferred_language": "%s",\n  "branch_prefix": "%s"\n}\n' "$language" "$branch_prefix" > .reconcile-ops/config.json
 ```
 
 8. Refresh top-level example symlinks for the selected language. Symlink targets must be relative paths:
@@ -111,7 +113,7 @@ for file in requirement.md goal.md goal-issue.md pr.md spec.md; do
 done
 ```
 
-9. Verify `.reconcile-ops/config.json` contains only `preferred_language`.
+9. Verify `.reconcile-ops/config.json` contains only `preferred_language` and `branch_prefix`.
 10. Verify `.reconcile-ops/examples/*.md` are symlinks to `.reconcile-ops/examples/<language>/*.md`.
 
 ## Implementation Templates
@@ -120,7 +122,8 @@ Config shape:
 
 ```json
 {
-  "preferred_language": "en"
+  "preferred_language": "en",
+  "branch_prefix": "ai/"
 }
 ```
 
@@ -160,7 +163,7 @@ to be created.
 | --- | --- |
 | "The tools are probably installed." | Check each tool and skip only confirmed installed tools. |
 | "Rewrite example files directly." | Point top-level examples to language folders with symlinks. |
-| "Store more config now." | `config.json` stores only `preferred_language` for v1. |
+| "Store more config now." | `config.json` stores only `preferred_language` and `branch_prefix` for v1. |
 | "Run non-idempotent commands." | Check the current state first and skip already-correct steps. |
 | "Overwrite .reconcile-ops/ to update it." | Do not overwrite an existing `.reconcile-ops/` directory. |
 
@@ -168,7 +171,7 @@ to be created.
 
 - Setup overwrites an existing `.reconcile-ops/` directory
 - Setup creates or overwrites files under `.reconcile-ops/examples/en`, `zh`, or `jp`
-- `.reconcile-ops/config.json` contains fields other than `preferred_language`
+- `.reconcile-ops/config.json` contains fields other than `preferred_language` and `branch_prefix`
 - `mise` is installed but `~/.zshrc` is missing the exact line `eval "$(mise activate zsh)"`
 - Setup appends duplicate `mise` initialization lines to `~/.zshrc`
 - Top-level `.reconcile-ops/examples/*.md` are regular files instead of symlinks
@@ -182,8 +185,9 @@ to be created.
 - [ ] `gh`, `jq`, `rg`, `curl`, and `mise` are installed or confirmed present
 - [ ] `~/.zshrc` contains the exact line `eval "$(mise activate zsh)"`
 - [ ] `.reconcile-ops/config.json` exists
-- [ ] `.reconcile-ops/config.json` contains only `preferred_language`
+- [ ] `.reconcile-ops/config.json` contains only `preferred_language` and `branch_prefix`
 - [ ] `preferred_language` is `en`, `zh`, or `jp`
+- [ ] `branch_prefix` ends with `/`
 - [ ] Selected language directory exists under `.reconcile-ops/examples/`
 - [ ] Top-level example markdown files are relative symlinks to the selected language folder
 - [ ] Re-running setup skips already-correct steps

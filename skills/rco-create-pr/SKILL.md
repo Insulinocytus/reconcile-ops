@@ -39,7 +39,7 @@ types. The description is generated from the actual changed files.
    - `.reconcile-ops/RULE.md`: rule changes
    - `.reconcile-ops/examples/**`: example structure changes
    - `.reconcile-ops/GOAL_ISSUE_MAP.json`: issue mapping changes
-5. Create a branch with prefix `codex/` unless the user requests another prefix.
+5. Read `branch_prefix` from `.reconcile-ops/config.json`. If the key is absent, stop and tell the user to run `rco-setup` first. Create a branch with that prefix unless the user requests another prefix.
 6. Stage only the files relevant to the ReconcileOps change.
 7. Commit with a concise message.
 8. Create the PR with a description based on `.reconcile-ops/examples/pr.md`.
@@ -69,7 +69,7 @@ Useful commands:
 
 ```bash
 git status --short
-git switch -c codex/<short-topic>
+git switch -c <branch_prefix><short-topic>
 git add <files>
 git commit -m "<message>"
 gh pr create --title "<title>" --body-file <body-file>
@@ -108,4 +108,5 @@ stop and fix the documents before creating the PR.
 - [ ] PR description was generated from file paths
 - [ ] No PR type was requested or recorded
 - [ ] Only relevant files were staged
+- [ ] `branch_prefix` was read from `.reconcile-ops/config.json`
 - [ ] PR review notes are factual and path-driven

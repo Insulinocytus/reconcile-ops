@@ -25,6 +25,7 @@ rco-setup的验收标准
 - .reconcile-ops/examples/下的顶层*.md必须是指向选定语言目录的相对符号链接，不可是普通文件
 - 不可创建或覆盖.reconcile-ops/examples/en、zh、jp下的语言特定文件
 - rco-setup/assets/examples/en下的所有md文件必须有对应的jp,zh版本
+- 技能会让用户自行决定create-pr技能创建的分支的前缀名
 
 ## rco-distill-req
 
@@ -86,3 +87,4 @@ rco-create-pr的验收标准
 - 技能必须先通过git status --short检查变更文件
 - PR描述必须基于实际变更文件生成
 - Review Notes中当docs/requirements/**变更时需确认requirement反映稳定client intent；当docs/goals/**变更时需确认Goal可验证
+- rco-create-pr会按需自动创建分支，并保证分支前缀名和config.json设置的一样
