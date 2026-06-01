@@ -5,7 +5,7 @@ description: Create ReconcileOps spec documents from requirement or Goal files. 
 
 # RCO Create Spec
 
-Before doing any work, read `.reconcile-ops/RULE.md` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
+Before doing any work, read `.reconcile-ops/config.json` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
 
 ## Overview
 
@@ -37,10 +37,11 @@ contracts, and frontend guidance for user-facing flows when those concerns are p
 - Prefer skills such as `api-and-interface-design`, `security-best-practices`, `postgresql-optimization`, `frontend-design`, `performance-optimization`, or `refactor` when their domain applies.
 - Do not write project status, owner, milestone, priority, progress, timestamps, raw client input, or unconfirmed questions.
 - Do not write implementation tasks; write baseline design.
+- All user-facing output must use the `preferred_language` from `.reconcile-ops/config.json`.
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/RULE.md` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
+1. Read `.reconcile-ops/config.json` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
 2. Read `.reconcile-ops/examples/spec.md` for structure only.
 3. Read the input requirement or Goal file.
 4. Follow links between requirement and Goal files when available, so the spec is grounded in both business intent and verifiable delivery goals.
@@ -154,12 +155,12 @@ before presenting it.
 - Spec is a task checklist instead of a design document
 - Spec ignores obvious security, API, data, validation, or error-handling concerns
 - Spec path is not under `docs/specs/<business-area>/`
-- Agent proceeds when `.reconcile-ops/RULE.md` is missing without telling the user to run `rco-setup`
+- Agent proceeds when `.reconcile-ops/config.json` is missing without telling the user to run `rco-setup`
 
 ## Verification
 
-- [ ] `.reconcile-ops/RULE.md` was read
-- [ ] If `.reconcile-ops/RULE.md` was missing, user was told to run `rco-setup`
+- [ ] `.reconcile-ops/config.json` was read
+- [ ] If `.reconcile-ops/config.json` was missing, user was told to run `rco-setup`
 - [ ] `.reconcile-ops/examples/spec.md` was used only as a structure reference
 - [ ] Output path is `docs/specs/<business-area>/<capability-or-flow>.md`
 - [ ] Source requirement or Goal files are linked with Markdown relative links

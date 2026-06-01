@@ -5,7 +5,7 @@ description: Create missing GitHub issues for ReconcileOps Goal files. Use when 
 
 # RCO Create Issue
 
-Before doing any work, read `.reconcile-ops/RULE.md` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
+Before doing any work, read `.reconcile-ops/config.json` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
 
 ## Overview
 
@@ -24,10 +24,13 @@ GitHub Project entry point. Git stores only the Goal-to-issue mapping, not Proje
 - Issue body contains only a default-branch link to the Goal file.
 - Do not update issue content, close issues, or sync Project status in v1.
 - `.reconcile-ops/GOAL_ISSUE_MAP.json` stores only `goal id -> issue id`.
+- A Goal maps to exactly one GitHub Project issue.
+- GitHub Project and issue metadata own milestone, owner, status, priority, and progress.
+- All user-facing output must use the `preferred_language` from `.reconcile-ops/config.json`.
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/RULE.md` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
+1. Read `.reconcile-ops/config.json` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
 2. Read `.reconcile-ops/examples/goal-issue.md` for structure only.
 3. Scan `docs/goals/` or the user-provided Goal folder.
 4. For each `G-*.md`, parse the first heading:
@@ -81,12 +84,12 @@ stop and ask for the missing repository or project information. Do not guess a r
 - `.reconcile-ops/GOAL_ISSUE_MAP.json` contains status, owner, milestone, or priority
 - Existing issue content is edited
 - Duplicate issue is created for the same Goal ID
-- Agent proceeds when `.reconcile-ops/RULE.md` is missing without telling the user to run `rco-setup`
+- Agent proceeds when `.reconcile-ops/config.json` is missing without telling the user to run `rco-setup`
 
 ## Verification
 
-- [ ] `.reconcile-ops/RULE.md` was read
-- [ ] If `.reconcile-ops/RULE.md` was missing, user was told to run `rco-setup`
+- [ ] `.reconcile-ops/config.json` was read
+- [ ] If `.reconcile-ops/config.json` was missing, user was told to run `rco-setup`
 - [ ] Goal ID and title were parsed from the Goal heading
 - [ ] Existing issues were checked before creation
 - [ ] Created issue title uses `[G-000001] Goal Title`

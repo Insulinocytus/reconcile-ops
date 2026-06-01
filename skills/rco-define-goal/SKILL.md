@@ -5,7 +5,7 @@ description: Define verifiable ReconcileOps Goals from cleaned requirement docum
 
 # RCO Define Goal
 
-Before doing any work, read `.reconcile-ops/RULE.md` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
+Before doing any work, read `.reconcile-ops/config.json` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
 
 ## Overview
 
@@ -27,10 +27,11 @@ It is not a GitHub Project issue and must not contain status metadata.
 - Use Markdown relative links in `Source Requirements`.
 - Allocate Goal IDs from observed current files, issue mappings, and Git history.
 - Never reuse a Goal ID.
+- All user-facing output must use the `preferred_language` from `.reconcile-ops/config.json`.
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/RULE.md` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
+1. Read `.reconcile-ops/config.json` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
 2. Read `.reconcile-ops/examples/goal.md` for structure only.
 3. Read the source requirement file or files.
 4. Decide whether the requirement content is stable enough to produce a verifiable Goal.
@@ -116,12 +117,12 @@ Git unchanged unless another Goal can be safely defined.
 - Goal ID is reused
 - `Source Requirements` are plain text paths instead of Markdown links
 - Acceptance criteria are vague or unverifiable
-- Agent proceeds when `.reconcile-ops/RULE.md` is missing without telling the user to run `rco-setup`
+- Agent proceeds when `.reconcile-ops/config.json` is missing without telling the user to run `rco-setup`
 
 ## Verification
 
-- [ ] `.reconcile-ops/RULE.md` was read
-- [ ] If `.reconcile-ops/RULE.md` was missing, user was told to run `rco-setup`
+- [ ] `.reconcile-ops/config.json` was read
+- [ ] If `.reconcile-ops/config.json` was missing, user was told to run `rco-setup`
 - [ ] Output path is `docs/goals/G-*.md`
 - [ ] Goal ID is next greater observed ID
 - [ ] Goal ID was not reused

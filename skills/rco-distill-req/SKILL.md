@@ -5,7 +5,7 @@ description: Distill messy client input or interview-style Q&A into a cleaned Re
 
 # RCO Distill Requirement
 
-Before doing any work, read `.reconcile-ops/RULE.md` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
+Before doing any work, read `.reconcile-ops/config.json` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
 
 ## Overview
 
@@ -29,10 +29,11 @@ what the client explicitly does not want, and stable constraints.
 - Keep requirement files business-topic level, not one file per sentence or source.
 - Do not create Goals in this skill.
 - If no input is provided, list supported formats and offer interview-style intake before proceeding.
+- All user-facing output must use the `preferred_language` from `.reconcile-ops/config.json`.
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/RULE.md` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
+1. Read `.reconcile-ops/config.json` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
 2. Read `.reconcile-ops/examples/requirement.md` for structure only.
 3. If no input was provided, list the supported input formats (meeting notes, STT transcripts, Notion pages, Slack messages, emails, client feedback) and offer interview-style intake. Do not proceed without input.
 4. Review the provided messy input.
@@ -100,13 +101,13 @@ content remains.
 - File contains open questions or unresolved assumptions
 - Requirement file is named after a meeting date instead of a business topic
 - The output includes Goal IDs
-- Agent proceeds when `.reconcile-ops/RULE.md` is missing without telling the user to run `rco-setup`
+- Agent proceeds when `.reconcile-ops/config.json` is missing without telling the user to run `rco-setup`
 - Agent proceeds without input and does not prompt for supported formats
 
 ## Verification
 
-- [ ] `.reconcile-ops/RULE.md` was read
-- [ ] If `.reconcile-ops/RULE.md` was missing, user was told to run `rco-setup`
+- [ ] `.reconcile-ops/config.json` was read
+- [ ] If `.reconcile-ops/config.json` was missing, user was told to run `rco-setup`
 - [ ] Output path is `docs/requirements/<business-topic>.md`
 - [ ] Requirement is grouped by business topic
 - [ ] Raw input is not committed

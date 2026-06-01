@@ -5,7 +5,7 @@ description: Set up ReconcileOps repository prerequisites and language configura
 
 # RCO Setup
 
-Before doing any work, read `.reconcile-ops/RULE.md` if it exists and has not already been read in this session.
+Before doing any work, read `.reconcile-ops/config.json` if it exists and has not already been read in this session.
 
 ## Overview
 
@@ -34,6 +34,7 @@ folder.
 - `config.json` stores only `preferred_language` and `branch_prefix`.
 - Supported language values are `en`, `zh`, and `jp`.
 - Do not overwrite an existing `.reconcile-ops/` directory.
+- `preferred_language` in `config.json` drives the output language for all `rco-*` skills.
 
 ## Standard Workflow
 
@@ -48,7 +49,7 @@ else
 fi
 ```
 
-2. Read `.reconcile-ops/RULE.md` if it exists and has not already been read in this session.
+2. Read `.reconcile-ops/config.json` if it exists and has not already been read in this session.
 3. Check required tools and install only missing tools:
 
 ```bash
@@ -147,7 +148,7 @@ Expected example layout:
 
 ## Bundled Resources
 
-- `skills/rco-setup/assets/.reconcile-ops/`: Complete `.reconcile-ops/` directory containing `RULE.md`, `GOAL_ISSUE_MAP.json`, `config.json`, and `examples/`. Copied to the project root when `.reconcile-ops/` does not already exist.
+- `skills/rco-setup/assets/.reconcile-ops/`: Complete `.reconcile-ops/` directory containing `GOAL_ISSUE_MAP.json`, `config.json`, and `examples/`. Copied to the project root when `.reconcile-ops/` does not already exist.
 
 ## Agent Feedback Loop
 
@@ -180,7 +181,7 @@ to be created.
 ## Verification
 
 - [ ] `.reconcile-ops/` exists in the project root (copied from assets if missing)
-- [ ] `.reconcile-ops/RULE.md` was read if it existed
+- [ ] `.reconcile-ops/config.json` was read if it existed
 - [ ] `gh`, `jq`, `rg`, `curl`, and `mise` are installed or confirmed present
 - [ ] `~/.zshrc` contains the exact line `eval "$(mise activate zsh)"`
 - [ ] `.reconcile-ops/config.json` exists

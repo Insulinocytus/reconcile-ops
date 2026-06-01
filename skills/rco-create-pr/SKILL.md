@@ -5,7 +5,7 @@ description: Create a pull request for ReconcileOps document, rule, example, or 
 
 # RCO Create PR
 
-Before doing any work, read `.reconcile-ops/RULE.md` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
+Before doing any work, read `.reconcile-ops/config.json` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
 
 ## Overview
 
@@ -16,7 +16,7 @@ types. The description is generated from the actual changed files.
 
 - Opening a PR after creating or updating requirements
 - Opening a PR after creating or updating Goals
-- Opening a PR after changing `.reconcile-ops/RULE.md`
+- Opening a PR after changing `.reconcile-ops/config.json`
 - Opening a PR after changing examples or issue mappings
 - Creating a reviewable trace for ReconcileOps document changes
 
@@ -26,16 +26,17 @@ types. The description is generated from the actual changed files.
 - Describe what changed based on file paths.
 - Do not write project status metadata into Git documents.
 - Keep PR descriptions factual and review-oriented.
+- All user-facing output must use the `preferred_language` from `.reconcile-ops/config.json`.
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/RULE.md` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
+1. Read `.reconcile-ops/config.json` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
 2. Read `.reconcile-ops/examples/pr.md` for structure only.
 3. Inspect changed files with `git status --short`.
 4. Build a PR summary from paths:
    - `docs/requirements/**`: requirement changes
    - `docs/goals/**`: Goal changes
-   - `.reconcile-ops/RULE.md`: rule changes
+   - `.reconcile-ops/config.json`: rule changes
    - `.reconcile-ops/examples/**`: example structure changes
    - `.reconcile-ops/GOAL_ISSUE_MAP.json`: issue mapping changes
 5. Read `branch_prefix` from `.reconcile-ops/config.json`. If the key is absent, stop and tell the user to run `rco-setup` first. Create a branch with that prefix unless the user requests another prefix.
@@ -99,12 +100,12 @@ stop and fix the documents before creating the PR.
 - Unrelated files are staged
 - PR body contains milestone, owner, priority, or progress as Git-managed state
 - Requirement or Goal files contain status metadata
-- Agent proceeds when `.reconcile-ops/RULE.md` is missing without telling the user to run `rco-setup`
+- Agent proceeds when `.reconcile-ops/config.json` is missing without telling the user to run `rco-setup`
 
 ## Verification
 
-- [ ] `.reconcile-ops/RULE.md` was read
-- [ ] If `.reconcile-ops/RULE.md` was missing, user was told to run `rco-setup`
+- [ ] `.reconcile-ops/config.json` was read
+- [ ] If `.reconcile-ops/config.json` was missing, user was told to run `rco-setup`
 - [ ] Changed files were inspected
 - [ ] PR description was generated from file paths
 - [ ] No PR type was requested or recorded
