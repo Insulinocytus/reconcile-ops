@@ -37,7 +37,7 @@ contracts, and frontend guidance for user-facing flows when those concerns are p
 - Prefer skills such as `api-and-interface-design`, `security-best-practices`, `postgresql-optimization`, `frontend-design`, `performance-optimization`, or `refactor` when their domain applies.
 - Do not write project status, owner, milestone, priority, progress, timestamps, raw client input, or unconfirmed questions.
 - Do not write implementation tasks; write baseline design.
-- All user-facing output must use the `preferred_language` from `.reconcile-ops/config.json`.
+
 
 ## Standard Workflow
 

@@ -27,7 +27,7 @@ types. The description is generated from the actual changed files.
 - Do not write project status metadata into Git documents.
 - Keep PR descriptions factual and review-oriented.
 - When a PR relates to a Goal, update the corresponding GitHub issue body with the PR link.
-- All user-facing output must use the `preferred_language` from `.reconcile-ops/config.json`.
+
 
 ## Standard Workflow
 

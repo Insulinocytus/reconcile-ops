@@ -30,7 +30,7 @@ what the client explicitly does not want, and stable constraints.
 - Do not create Goals in this skill.
 - If no input is provided, list supported formats and offer interview-style intake before proceeding.
 - When multiple sources provide conflicting requirements, do not resolve the conflict by assumption. Ask the user to confirm which intent takes priority.
-- All user-facing output must use the `preferred_language` from `.reconcile-ops/config.json`.
+
 
 ## Standard Workflow
 

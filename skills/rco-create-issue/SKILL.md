@@ -27,7 +27,7 @@ GitHub Project entry point. Git stores only the Goal-to-issue mapping, not Proje
 - `.reconcile-ops/GOAL_ISSUE_MAP.json` stores only `goal id -> issue id`.
 - A Goal maps to exactly one GitHub Project issue.
 - GitHub Project and issue metadata own milestone, owner, status, priority, and progress.
-- All user-facing output must use the `preferred_language` from `.reconcile-ops/config.json`.
+
 
 ## Standard Workflow
 

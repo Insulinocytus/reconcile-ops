@@ -27,7 +27,7 @@ It is not a GitHub Project issue and must not contain status metadata.
 - Use Markdown relative links in `Source Requirements`.
 - Allocate Goal IDs from observed current files, issue mappings, and Git history.
 - Never reuse a Goal ID.
-- All user-facing output must use the `preferred_language` from `.reconcile-ops/config.json`.
+
 
 ## Standard Workflow
 
