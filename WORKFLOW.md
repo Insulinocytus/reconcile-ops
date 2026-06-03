@@ -21,9 +21,8 @@ flowchart LR
   goalPrSkill["rco-create-pr"]
 
   mergedGoal["Merged Goal document<br/>docs/goals/G-000001.md"]
-  issueSkill["rco-create-issue"]
+  issueSkill["rco-create-goal-issue"]
   issue["GitHub Project issue<br/>[G-000001] Goal Title"]
-  map["Issue map<br/>.reconcile-ops/GOAL_ISSUE_MAP.json"]
 
   meeting --> distill
   stt --> distill
@@ -37,5 +36,4 @@ flowchart LR
   mergedReq --> define --> goal --> goalPrSkill
 
   mergedGoal --> issueSkill --> issue
-  issueSkill --> map
 ```

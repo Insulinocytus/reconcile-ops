@@ -39,12 +39,12 @@ types. The description is generated from the actual changed files.
    - `docs/goals/**`: Goal changes
    - `.reconcile-ops/config.json`: rule changes
    - `.reconcile-ops/examples/**`: example structure changes
-   - `.reconcile-ops/GOAL_ISSUE_MAP.json`: issue mapping changes
+
 5. Read `branch_prefix` from `.reconcile-ops/config.json`. If the key is absent, stop and tell the user to run `rco-setup` first. Create a branch with that prefix unless the user requests another prefix.
 6. Stage the changed files.
 7. Commit with a concise message.
 8. Create the PR with a description based on `.reconcile-ops/examples/pr.md`.
-9. If the changed files include `docs/goals/G-*.md`, look up the corresponding issue in `.reconcile-ops/GOAL_ISSUE_MAP.json` and append the PR link to the issue body under the PRs section.
+9. If the changed files include `docs/goals/G-*.md`, find the corresponding issue by searching for `[G-XXXXXX]` in issue titles and append the PR link to the issue body under the PRs section.
 10. Report the PR URL and changed files.
 
 ## Implementation Templates

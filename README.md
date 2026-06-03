@@ -20,11 +20,11 @@ ReconcileOps 是一套低规则、AI 归整的团队协作方法。它不假设�
 |------|-----------|
 | `rco-setup` | 初始化仓库的 .reconcile-ops 目录、工具依赖和配置 |
 | `rco-distill-req` | 将会议纪要、Slack、邮件等脏输入提炼为干净的需求文档 |
-| `rco-define-goal` | 从需求文档定义有唯一 ID、可验证完成定义的 Goal 文档 |
-| `rco-create-spec` | 从需求或 Goal 文档创建工程规格说明（行为、接口、数据契约等） |
-| `rco-create-issue` | 为缺少 GitHub Issue 的 Goal 文档创建 Issue 并更新映射表 |
-| `rco-create-pr` | 将 ReconcileOps 文档变更提交为 PR，描述由变更文件路径自动生成 |
-| `rco-nightly-inspect` | 合并后巡检：发现孤儿 PR、缺失 Issue 的 Goal、不完整 Goal、过期 Goal、文档债、缺少 Scope/Decision Owner 的 PR、停滞 Issue |
+| `rco-define-goal` | 从需求文档定义有唯一 ID 和验收标准的 Goal 文档 |
+| `rco-create-goal-issue` | 为缺少 GitHub Issue 的 Goal 文档创建 Issue |
+| `rco-create-adr-issue` | 遇到技术决策时创建 ADR Issue |
+| `rco-create-adr-md` | 将已关闭的 ADR Issue 结论汇总到 docs/adr.md |
+| `rco-create-pr` | 将 ReconcileOps 文档变更提交为 PR |
 
 ## 各技能 Workflow
 
@@ -34,24 +34,24 @@ ReconcileOps 是一套低规则、AI 归整的团队协作方法。它不假设�
 
 ### rco-distill-req
 
-读取 config.json → 读取示例结构 → 若无输入则列出支持格式并建议访谈 → 识别业务主题 → 仅写入稳定内容（背景、客户希望、客户不需要、约束）→ 未确认问题报告在响应中不写入 Git → 询问是否继续 rco-define-goal 或先 rco-create-pr。
+读取 config.json → 若无输入则列出支持格式并建议访谈 → 识别业务主题 → 扫描已有需求文档 → 匹配则合并更新，不匹配则新建 → 写入四段（Situations / Needs / Doesn't Need / Pending Confirmation）→ 报告待确认数量 → 询问是否继续 rco-define-goal 或先 rco-create-pr。
 
 ### rco-define-goal
 
-读取 config.json → 读取示例结构 → 读取源需求 → 判断需求是否稳定可验证 → 扫描已有 Goal ID（文件 + 映射表 + Git 历史）→ 分配下一个不重复 ID → 创建 docs/goals/G-*.md（目标、来源需求、客户意图、交付物、验收标准、验证方法）→ 提醒运行 rco-create-pr。
+读取 config.json → 读取源需求 → 判断需求是否足够明确 → 扫描已有 Goal ID → 分配下一个不重复 ID → 创建 docs/goals/G-*.md（来源需求、验收标准）→ 废弃时加 Superseded 标记 → 提醒运行 rco-create-pr 和 rco-create-goal-issue。
 
-### rco-create-spec
+### rco-create-goal-issue
 
-读取 config.json → 读取示例结构 → 读取输入需求或 Goal → 跟踪需求与 Goal 之间的链接 → 识别业务领域和输出路径 → 调用相关工程技能（API 设计、安全、数据库等）→ 写入 docs/specs/<business-area>/<capability-or-flow>.md → 提醒运行 rco-create-pr。
+读取 config.json → 扫描 docs/goals/ → 解析每个 G-*.md 的标题 → 搜索是否已有 [G-XXXXXX] 标题的 Issue → 创建 Issue（Goal 链接 + PRs 段）并加入 GitHub Project → Superseded 的 Goal 设 Issue 状态为 Superseded。
 
-### rco-create-issue
+### rco-create-adr-issue
 
-读取 config.json → 读取示例结构 → 扫描 docs/goals/ → 解析每个 G-*.md 的标题 → 检查是否已有对应 Issue → 创建 [G-000001] Goal Title 格式的 Issue → 加入 GitHub Project → 仅在 GOAL_ISSUE_MAP.json 记录 goal id → issue id 映射。
+遇到技术决策 → 扫描已有 ADR Issue 编号 → 分配下一个 ID → 创建 Issue（Consequences / Context / Decision / Supersedes）→ 加 adr label。
+
+### rco-create-adr-md
+
+扫描所有 ADR Issue → 提取已关闭 Issue 的 Consequences → 汇总到 docs/adr.md（Active + Superseded + Pending）→ 提醒运行 rco-create-pr。
 
 ### rco-create-pr
 
-读取 config.json → 读取示例结构 → 检查变更文件 → 按路径生成 PR 摘要 → 从 config.json 读取分支前缀 → 创建分支 → 仅暂存相关文件 → 提交 → 创建 PR → 报告 URL 和变更文件。
-
-### rco-nightly-inspect
-
-读取 config.json → 读取 inspect_stale_days（默认 14）→ 收集所有开放 PR 和 Goal 文件 → 逐项检查：孤儿 PR（无 Goal 引用）、Goal 无 Issue、Goal 缺少 L1 必填段、Goal 过期、文档债（需求无 Goal / Goal 无 Spec / Spec 无 PR）、PR 缺少 Scope 或 Decision Owner、停滞 Issue → 汇总为结构化报告写入 .reconcile-ops/nightly-inspect-report.md → 可选 --create-issues 为高优先级发现创建 Issue → 报告总发现数和报告路径。
+读取 config.json → 检查变更文件 → 按路径生成 PR 摘要 → 从 config.json 读取分支前缀 → 创建分支 → 仅暂存相关文件 → 提交 → 创建 PR → 如果涉及 Goal 变更则更新对应 Issue 的 PRs 段 → 报告 URL 和变更文件。

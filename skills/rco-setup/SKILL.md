@@ -104,14 +104,12 @@ Expected example layout:
 .reconcile-ops/examples/
   requirement.md
   goal.md
-  goal-issue.md
   pr.md
-  spec.md
 ```
 
 ## Bundled Resources
 
-- `skills/rco-setup/assets/.reconcile-ops/`: Complete `.reconcile-ops/` directory containing `GOAL_ISSUE_MAP.json`, `config.json`, and `examples/`. Copied to the project root when `.reconcile-ops/` does not already exist.
+- `skills/rco-setup/assets/.reconcile-ops/`: Complete `.reconcile-ops/` directory containing `config.json` and `examples/`. Copied to the project root when `.reconcile-ops/` does not already exist.
 
 ## Agent Feedback Loop
 
