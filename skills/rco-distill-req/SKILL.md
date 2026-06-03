@@ -5,7 +5,7 @@ description: Use when receiving meeting notes, STT transcripts, Notion pages, Sl
 
 # RCO Distill Requirement
 
-Before doing any work, read `.reconcile-ops/config.json` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
+Before doing any work, read `.rco/config.json` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
 
 ## Overview
 
@@ -39,7 +39,7 @@ and specs, not here.
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/config.json` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
+1. Read `.rco/config.json` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
 2. If no input was provided, list the supported input formats (meeting notes, STT transcripts, Notion pages, Slack messages, emails, client feedback) and offer interview-style intake. Do not proceed without input.
 4. Review the provided messy input.
 5. If the input from multiple sources contains conflicting requirements, stop and ask the user which intent takes priority. Do not silently resolve conflicts.
@@ -122,14 +122,14 @@ content remains.
 - Pending Confirmation items are written as already-resolved facts instead of ambiguous points needing clarification
 - Requirement file is named after a meeting date instead of a business topic
 - The output includes Goal IDs
-- Agent proceeds when `.reconcile-ops/config.json` is missing without telling the user to run `rco-setup`
+- Agent proceeds when `.rco/config.json` is missing without telling the user to run `rco-setup`
 - Agent proceeds without input and does not prompt for supported formats
 - Conflicting requirements are resolved without user confirmation
 
 ## Verification
 
-- [ ] `.reconcile-ops/config.json` was read
-- [ ] If `.reconcile-ops/config.json` was missing, user was told to run `rco-setup`
+- [ ] `.rco/config.json` was read
+- [ ] If `.rco/config.json` was missing, user was told to run `rco-setup`
 - [ ] Output path is `docs/requirements/<business-topic>.md`
 - [ ] Requirement is grouped by business topic
 - [ ] Existing requirement documents were scanned before creating a new file

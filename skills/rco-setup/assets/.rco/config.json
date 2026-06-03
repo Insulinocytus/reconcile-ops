@@ -1,5 +1,6 @@
 {
   "branch_prefix": "ai/",
   "github_project_url": "",
-  "github_project_id": ""
+  "github_project_id": "",
+  "pr_reviewers": {}
 }

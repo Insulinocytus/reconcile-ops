@@ -5,7 +5,7 @@ description: Use when a technical decision needs to be made and recorded as an A
 
 # RCO Create ADR Issue
 
-Before doing any work, read `.reconcile-ops/config.json` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
+Before doing any work, read `.rco/config.json` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
 
 ## Overview
 
@@ -32,7 +32,7 @@ require a PR to create or update. Once closed, the conclusion is extracted by
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/config.json` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
+1. Read `.rco/config.json` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
 2. Identify the technical decision that needs to be recorded.
 3. Allocate the next ADR ID by scanning existing issues with the `adr` label:
 
@@ -139,12 +139,12 @@ dependency upgrade), do not create an ADR.
 - Body structure is not Consequences / Context / Decision / Supersedes
 - Superseded ADR Issue is reopened instead of a new ADR being created
 - ADR content is written into a Git file by this skill
-- Agent proceeds when `.reconcile-ops/config.json` is missing without telling the user to run `rco-setup`
+- Agent proceeds when `.rco/config.json` is missing without telling the user to run `rco-setup`
 
 ## Verification
 
-- [ ] `.reconcile-ops/config.json` was read
-- [ ] If `.reconcile-ops/config.json` was missing, user was told to run `rco-setup`
+- [ ] `.rco/config.json` was read
+- [ ] If `.rco/config.json` was missing, user was told to run `rco-setup`
 - [ ] ADR ID is next sequential number from existing ADR Issues
 - [ ] ADR ID was not reused
 - [ ] Issue has the `adr` label

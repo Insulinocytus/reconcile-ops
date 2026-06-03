@@ -5,7 +5,7 @@ description: Use when docs/goals/G-*.md files lack corresponding GitHub issues, 
 
 # RCO Create Goal Issue
 
-Before doing any work, read `.reconcile-ops/config.json` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
+Before doing any work, read `.rco/config.json` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
 
 ## Overview
 
@@ -31,7 +31,7 @@ owns acceptance criteria and source requirements. They never duplicate content.
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/config.json` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
+1. Read `.rco/config.json` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
 2. Scan `docs/goals/` or the user-provided Goal folder.
 3. For each `G-*.md`, parse the first heading after any Superseded marker:
    - `# G-000001: Goal Title`
@@ -46,7 +46,7 @@ Goal: <default-branch-link-to-docs/goals/G-000001.md>
 PRs:
 ```
 
-6. Add the issue to the GitHub Project when `github_project_id` is present in `.reconcile-ops/config.json`. If `github_project_id` is empty, skip this step.
+6. Add the issue to the GitHub Project when `github_project_id` is present in `.rco/config.json`. If `github_project_id` is empty, skip this step.
 7. If the Goal file has `> **Superseded**`, set the issue status to Superseded.
 8. Skip existing issues without changing them.
 
@@ -96,12 +96,12 @@ tell the user to run `rco-setup` to configure the project.
 - Existing issue content is rewritten
 - Duplicate issue is created for the same Goal ID
 - Superseded Goal does not have its issue status set to Superseded
-- Agent proceeds when `.reconcile-ops/config.json` is missing without telling the user to run `rco-setup`
+- Agent proceeds when `.rco/config.json` is missing without telling the user to run `rco-setup`
 
 ## Verification
 
-- [ ] `.reconcile-ops/config.json` was read
-- [ ] If `.reconcile-ops/config.json` was missing, user was told to run `rco-setup`
+- [ ] `.rco/config.json` was read
+- [ ] If `.rco/config.json` was missing, user was told to run `rco-setup`
 - [ ] Goal ID and title were parsed from the Goal heading
 - [ ] Existing issues were checked before creation
 - [ ] Created issue title uses `[G-000001] Goal Title`

@@ -5,7 +5,7 @@ description: Use when creating or updating a Goal document under docs/goals/, or
 
 # RCO Define Goal
 
-Before doing any work, read `.reconcile-ops/config.json` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
+Before doing any work, read `.rco/config.json` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
 
 ## Overview
 
@@ -32,7 +32,7 @@ in the Issue layer.
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/config.json` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
+1. Read `.rco/config.json` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
 2. Read the source requirement file or files.
 3. Decide whether the requirement content is stable enough to produce a Goal with concrete acceptance criteria.
 4. Allocate the next Goal ID:
@@ -126,12 +126,12 @@ Goal can be safely defined.
 - `Source Requirements` are plain text paths instead of Markdown links
 - Acceptance criteria are vague or unverifiable
 - A Goal file is deleted instead of marked Superseded
-- Agent proceeds when `.reconcile-ops/config.json` is missing without telling the user to run `rco-setup`
+- Agent proceeds when `.rco/config.json` is missing without telling the user to run `rco-setup`
 
 ## Verification
 
-- [ ] `.reconcile-ops/config.json` was read
-- [ ] If `.reconcile-ops/config.json` was missing, user was told to run `rco-setup`
+- [ ] `.rco/config.json` was read
+- [ ] If `.rco/config.json` was missing, user was told to run `rco-setup`
 - [ ] Output path is `docs/goals/G-*.md`
 - [ ] Goal ID is next greater observed ID
 - [ ] Goal ID was not reused

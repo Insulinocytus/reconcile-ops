@@ -5,7 +5,7 @@ description: Use when ADR Issues have been closed and their conclusions need to 
 
 # RCO Create ADR Markdown
 
-Before doing any work, read `.reconcile-ops/config.json` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
+Before doing any work, read `.rco/config.json` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
 
 ## Overview
 
@@ -29,7 +29,7 @@ Individual ADR Issues are the discussion and decision process; this file is the 
 
 ## Standard Workflow
 
-1. Read `.reconcile-ops/config.json` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
+1. Read `.rco/config.json` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
 2. Collect all ADR Issues, both open and closed:
 
 ```bash
@@ -135,12 +135,12 @@ re-running after decisions are closed.
 - ADR entries are missing the Issue link
 - File contains full Context and Decision sections instead of Conclusions only
 - No Pending section when open ADR Issues exist
-- Agent proceeds when `.reconcile-ops/config.json` is missing without telling the user to run `rco-setup`
+- Agent proceeds when `.rco/config.json` is missing without telling the user to run `rco-setup`
 
 ## Verification
 
-- [ ] `.reconcile-ops/config.json` was read
-- [ ] If `.reconcile-ops/config.json` was missing, user was told to run `rco-setup`
+- [ ] `.rco/config.json` was read
+- [ ] If `.rco/config.json` was missing, user was told to run `rco-setup`
 - [ ] All ADR Issues were collected (open and closed)
 - [ ] Only closed ADRs appear in the active/superseded sections
 - [ ] Open ADRs appear in the Pending section only
