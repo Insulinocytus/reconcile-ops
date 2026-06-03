@@ -23,7 +23,7 @@ Issue. All other PRs omit the Goals section.
 
 - PR title is a one-line summary of what the PR does.
 - PR body starts with Goals (if implementing a Goal), then Summary, then Changed Files.
-- Goals are linked by Issue number (`#123`). Only PRs that directly implement a Goal include this section. All others omit it.
+- Goals are linked by Issue number (`#123`). Only PRs whose changes satisfy a Goal's acceptance criteria include this section. Document-only PRs (creating/updating Goals, requirements, or ADRs) never include Goals.
 - Reviewers are auto-assigned based on `pr_reviewers` in config — matching changed file paths against `paths` and evaluating `conditions` against the diff.
 - Changed Files are a table: path (or folder) with a one-sentence note. Folders can be used when a group of files serves one purpose.
 - Do not write project status metadata into Git documents.
@@ -32,8 +32,8 @@ Issue. All other PRs omit the Goals section.
 
 1. Read `.rco/config.json` unless already read in this session. If the file does not exist, stop and tell the user to run `rco-setup` first.
 2. Inspect changed files with `git status --short`.
-3. Determine whether this PR directly implements a Goal. Search for Goal IDs in the changed files or ask the user. If yes, link the corresponding Issue by number. If not, omit the Goals section.
-4. Collect reviewers: match changed file paths against `paths` in each `pr_reviewers` entry, evaluate `conditions` against the diff, and union the `reviewers` from all matching entries.
+3. Determine whether this PR directly implements a Goal — meaning the changes satisfy a Goal's acceptance criteria. Creating or modifying a Goal document, requirement document, or ADR file is NOT implementing a Goal. Search for Goal IDs in changed implementation files or ask the user. If yes, link the corresponding Issue by number. If not, omit the Goals section.
+4. Collect reviewers: match changed file paths against `paths` in each `pr_reviewers` entry, evaluate `conditions` against the diff, and union the `reviewers` from all matching entries. If any changed file path is not covered by any scope's `paths`, warn the user that reviewer routing has a coverage gap and suggest either manually specifying reviewers or running `rco-setup` to update the `pr_reviewers` configuration.
 5. Build the PR body:
 
 PR implementing a Goal:
@@ -104,16 +104,18 @@ gh issue edit <issue-number> --body "$(gh issue view <issue-number> --json body 
 
 If relevant files contain status metadata, stop and fix the documents before creating the PR.
 If the issue update fails because the issue does not exist yet, report the missing issue and continue
-without blocking the PR creation. If no reviewers matched from config and the PR touches business code,
-warn the user that reviewer routing may be incomplete and suggest updating config.
+without blocking the PR creation. If any changed file path is not covered by any `pr_reviewers` scope, warn the user
+about the coverage gap and suggest manually specifying reviewers or running `rco-setup`.
+If no reviewers matched at all and the PR touches business code, warn the user.
 
 ## Common Rationalizations
 
 | Rationalization | Correct Response |
 | --- | --- |
-| "Force a Goal link on every PR." | Only PRs that directly implement a Goal include Goals. All others omit it. |
+| "Force a Goal link on every PR." | Only PRs satisfying a Goal's acceptance criteria include Goals. Document PRs never include Goals. |
 | "The PR should include status." | Status belongs in GitHub Project metadata. |
 | "No reviewers matched, so skip assignment." | Warn the user. Missing reviewer coverage means config needs updating. |
+| "Uncovered paths are fine, someone will review." | Warn the user about the coverage gap. Suggest running `rco-setup` to add the missing scope. |
 | "List every changed file individually." | Group files by folder when they serve one purpose. |
 | "Skip the diff sanity check." | Always verify the diff before creating the PR. Unexpected files mean something is wrong. |
 
@@ -124,6 +126,8 @@ warn the user that reviewer routing may be incomplete and suggest updating confi
 - Requirement or Goal files contain status metadata
 - Goals section is present for a PR that does not implement a Goal
 - A PR implementing a Goal has Goals section with vague text instead of Issue references
+- Goals section appears in a document-only PR (creating/updating Goal, requirement, or ADR files)
+- Changed file paths fall outside all `pr_reviewers` scope coverage and no warning was given
 - No reviewers matched from config for a business-code PR and no warning was given
 - Diff sanity check is skipped
 - Unexpected files appear in the diff and are not reported
@@ -142,4 +146,5 @@ warn the user that reviewer routing may be incomplete and suggest updating confi
 - [ ] Diff sanity check passed — no unexpected files
 - [ ] Changed Files section uses table format with path and note
 - [ ] If implementing a Goal, corresponding issue was updated with the PR link
+- [ ] Uncovered changed file paths were detected and a coverage gap warning was given
 - [ ] If no reviewers matched for a business-code PR, a warning was given

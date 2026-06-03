@@ -40,7 +40,13 @@ require a PR to create or update. Once closed, the conclusion is extracted by
 gh issue list --label adr --state all --json title --jq '.[].title' | rg -o 'ADR-[0-9]+' | rg -o '[0-9]+' | sort -n | tail -1
 ```
 
-4. Create the ADR Issue:
+4. Ensure the `adr` label exists in the repository. If not, create it:
+
+```bash
+gh label list --json name --jq '.[].name' | grep -qx adr || gh label create adr --description 'Architecture Decision Record' --color '0075CA'
+```
+
+5. Create the ADR Issue:
 
 - title: `[ADR-0001] <short decision description>`
 - label: `adr`
@@ -66,8 +72,8 @@ gh issue list --label adr --state all --json title --jq '.[].title' | rg -o 'ADR
 (Empty, or: Closes #[previous ADR issue number])
 ```
 
-5. If the ADR supersedes a previous one, add `Closes #[previous ADR issue number]` in the Supersedes section so the old Issue closes when the new one is closed.
-6. Report the Issue URL.
+6. If the ADR supersedes a previous one, add `Closes #[previous ADR issue number]` in the Supersedes section so the old Issue closes when the new one is closed.
+7. Report the Issue URL.
 
 ## Implementation Templates
 

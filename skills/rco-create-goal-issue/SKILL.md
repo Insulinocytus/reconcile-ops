@@ -23,7 +23,7 @@ owns acceptance criteria and source requirements. They never duplicate content.
 
 - Issue title format is `[G-000001] Goal Title`.
 - Issue body contains only a Goal file link and a PRs section. No acceptance criteria, no requirements, no scope.
-- When a PR is created for changes related to a Goal, append the PR link under the PRs section of the corresponding issue.
+- This skill creates Issues from scratch. `rco-create-pr` is responsible for appending PR links to existing Issue bodies. This skill never appends PR links.
 - A Goal maps to exactly one GitHub Project issue. Find the issue by searching for `[G-XXXXXX]` in the title.
 - GitHub Project owns status (Todo / In Progress / Done / Superseded).
 - GitHub Milestone owns deadline.
@@ -92,7 +92,6 @@ tell the user to run `rco-setup` to configure the project.
 - Issue title does not start with `[G-000001]`
 - Issue body duplicates Goal content (acceptance criteria, requirements)
 - Issue body is missing the PRs section
-- Duplicate issue is created for the same Goal ID
 - Existing issue content is rewritten
 - Duplicate issue is created for the same Goal ID
 - Superseded Goal does not have its issue status set to Superseded

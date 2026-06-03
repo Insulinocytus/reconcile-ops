@@ -56,7 +56,7 @@ in the Issue layer.
 6. If the user requests deactivating a Goal, add `> **Superseded**` on the line before the H1 title. Do not delete the file or remove its content.
 7. Stop and report missing confirmations if acceptance criteria cannot be made concrete.
 8. Verify no state metadata appears in the Goal file.
-9. Remind the user to run `rco-create-pr` for the Goal document changes, then `rco-create-goal-issue` to create or update the corresponding Issue.
+9. Remind the user to run `rco-create-pr` for the Goal document changes (this is a document PR, not a Goal-implementation PR, so no Goals section), then after the PR is merged run `rco-create-goal-issue` to create the corresponding Issue.
 
 ## Implementation Templates
 
