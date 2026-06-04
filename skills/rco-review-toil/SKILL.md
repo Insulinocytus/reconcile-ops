@@ -1,6 +1,6 @@
 ---
 name: rco-review-toil
-description: Use when development efficiency review is needed — detect where human time is wasted on things that should be automated, scripted, skill-ified, or CI-ified. Triggered manually or during nightly inspection alongside rco-nightly-inspect and rco-review-spaghetti. Not for PR review.
+description: Use when human time is being wasted on things that should not require human attention — manual steps, memorized conventions, unenforced rules, disconnected tools, problems caught only by human eyes. Not for PR review or code quality.
 ---
 
 # RCO Review Toil
@@ -19,6 +19,12 @@ when they could be automated, scripted, skill-ified, or CI-ified. Review is read
 - Nightly full-repository scan running alongside `rco-nightly-inspect` and `rco-review-spaghetti`
 
 Not for PR review. This skill reviews project-level patterns, not code-level quality.
+
+### When NOT to Use
+
+- PR code quality review → use `rco-review-spaghetti`
+- Drift alignment inspection → use `rco-nightly-inspect`
+- Reviewing a specific diff → not this skill's scope
 
 ## Core Principles
 
@@ -41,35 +47,7 @@ Not for PR review. This skill reviews project-level patterns, not code-level qua
 | Manual, area specified | User gave a focus area | That area and its related files |
 | Nightly scan | Scheduled or manual full scan | Whole project, root and near-root |
 
-3. Scan the project structure. Focus on:
-
-```bash
-# Root-level files — CI, config, scripts, docs
-ls -la *.md *.yml *.yaml *.json Makefile Dockerfile docker-compose* .env*
-
-# GitHub Actions
-ls -la .github/workflows/
-cat .github/workflows/*.yml
-
-# Package scripts and tooling
-cat package.json 2>/dev/null | jq '.scripts'
-cat Makefile 2>/dev/null
-cat pyproject.toml 2>/dev/null
-cat Cargo.toml 2>/dev/null
-
-# README and docs
-find . -maxdepth 2 -name '*.md' -not -path '*/node_modules/*' -not -path '*/.git/*'
-
-# Skill definitions (RCO or otherwise)
-find . -name 'SKILL.md' -not -path '*/.git/*'
-find . -path '*/.agents/skills/*' -o -path '*/.claude/skills/*'
-
-# Lint / format / commit hook config
-ls -la .eslintrc* .prettierrc* .commitlintrc* .husky/ .pre-commit* .editorconfig .lintstagedrc* 2>/dev/null
-
-# Environment and config templates
-ls -la .env* .env.example .env.template 2>/dev/null
-```
+3. Scan the project structure using the commands in Implementation Templates. Focus on root and near-root files.
 
 4. Run all four detection dimensions. Every dimension must produce findings or explicitly state "No findings." Never omit a dimension.
 
@@ -173,24 +151,30 @@ Print the same markdown report directly in the conversation.
 ## Implementation Templates
 
 ```bash
-# Scan root files
-ls -la *.md *.yml *.yaml *.json Makefile Dockerfile docker-compose* 2>/dev/null
+# Scan root-level files (CI, config, scripts, docs)
+ls -la *.md *.yml *.yaml *.json Makefile Dockerfile docker-compose* .env* 2>/dev/null
 
 # GitHub Actions
-ls -la .github/workflows/
-cat .github/workflows/*.yml
+ls -la .github/workflows/ && cat .github/workflows/*.yml
 
-# Package scripts
+# Package scripts and tooling
 cat package.json 2>/dev/null | jq '.scripts'
+cat Makefile 2>/dev/null
+cat pyproject.toml 2>/dev/null
+cat Cargo.toml 2>/dev/null
 
-# README files near root
+# README and docs near root
 find . -maxdepth 2 -name '*.md' -not -path '*/node_modules/*' -not -path '*/.git/*'
 
-# Skills
+# Skill definitions
 find . -name 'SKILL.md' -not -path '*/.git/*'
+find . -path '*/.agents/skills/*' -o -path '*/.claude/skills/*'
 
-# Lint/format/hook config
-ls -la .eslintrc* .prettierrc* .commitlintrc* .husky/ .pre-commit* .editorconfig 2>/dev/null
+# Lint / format / commit hook config
+ls -la .eslintrc* .prettierrc* .commitlintrc* .husky/ .pre-commit* .editorconfig .lintstagedrc* 2>/dev/null
+
+# Environment and config templates
+ls -la .env* .env.example .env.template 2>/dev/null
 
 # Create nightly Issue
 gh issue create --title "[Toil Review] $(date +%Y-%m-%d)" --body-file <report-file>

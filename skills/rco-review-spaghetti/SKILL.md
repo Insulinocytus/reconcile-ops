@@ -1,6 +1,6 @@
 ---
 name: rco-review-spaghetti
-description: Use when spaghetti code detection is needed — triggered manually, on a PR, via comment keyword like /review, or during nightly inspection alongside rco-nightly-inspect. Covers structure smells, duplication, naming, dead code, error handling, hardcoding, type safety, dependency issues, security vulnerabilities, and performance hazards.
+description: Use when code has structure smells, duplication, bad naming, dead code, swallowed errors, hardcoded secrets, type unsafety, stale dependencies, security vulnerabilities, or performance hazards. Works on PRs, diffs, uncommitted changes, or full repository scans.
 ---
 
 # RCO Review Spaghetti
