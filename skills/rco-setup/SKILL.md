@@ -26,6 +26,7 @@ configuration.
 - Fix items in a fixed order, skipping anything that already passes.
 - Keep setup idempotent.
 - `config.json` stores `branch_prefix`, `github_project_url`, `github_project_id`, and `pr_reviewers`.
+- `REVIEW.md` stores project-specific PR review dimensions. Optional — `rco-review-pr` works without it but will check custom dimensions if present.
 - Do not overwrite an existing `.rco/` directory.
 
 ## Standard Workflow
@@ -36,6 +37,7 @@ configuration.
    - Are `gh`, `jq`, `rg`, `curl` installed (via `mise`)?
    - Does `.rco/` directory exist?
    - Does `.rco/config.json` exist and contain `branch_prefix`, `github_project_url`, `github_project_id`, and `pr_reviewers`?
+   - Does `.rco/REVIEW.md` exist?
 
 2. If everything passes, ask the user whether to update `config.json`. If no, stop. If yes, skip to step 4.
 
@@ -129,7 +131,7 @@ Config shape:
 
 ## Bundled Resources
 
-- `skills/rco-setup/assets/.rco/`: Complete `.rco/` directory containing `config.json`. Copied to the project root when `.rco/` does not already exist.
+- `skills/rco-setup/assets/.rco/`: Complete `.rco/` directory containing `config.json` and `REVIEW.md`. Copied to the project root when `.rco/` does not already exist.
 
 ## Agent Feedback Loop
 
@@ -163,6 +165,7 @@ After the user installs the missing dependency, re-run the failed setup step.
 - [ ] `.rco/` exists in the project root (copied from assets if missing)
 - [ ] `.rco/config.json` was read if it existed
 - [ ] `.rco/config.json` contains `branch_prefix`, `github_project_url`, `github_project_id`, and `pr_reviewers`
+- [ ] `.rco/REVIEW.md` exists (optional — not required for setup to pass)
 - [ ] `branch_prefix` ends with `/`
 - [ ] `pr_reviewers` has at least one scope configured (or user explicitly declined)
 - [ ] Re-running setup skips already-correct steps
