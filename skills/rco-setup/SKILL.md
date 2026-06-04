@@ -94,17 +94,20 @@ configuration.
 
 5. Write `.rco/config.json` with all collected values.
 
-6. Ask the user whether to install the nightly review GitHub Actions workflow:
-   - If yes, check whether `.github/workflows/nightly-review.yml` already exists.
+6. Ask the user whether to install GitHub Actions workflow templates. Offer both independently:
+   - **Nightly review** — scheduled drift inspection, spaghetti code review, toil review
+   - **PR review** — automatic review on PR open/update, and `/review` keyword in PR comments
+
+   For each workflow the user accepts:
+   - Check whether the target file already exists under `.github/workflows/`
    - If it does not exist, copy from assets:
 
    ```bash
    mkdir -p .github/workflows
-   cp skills/rco-setup/assets/.github/workflows/nightly-review.yml .github/workflows/
+   cp skills/rco-setup/assets/.github/workflows/<workflow>.yml .github/workflows/
    ```
 
    - If it already exists, skip and inform the user.
-   - If the user declines, skip without warning.
    - **Tell the user this is a template, not a ready-to-run workflow.** They must adapt:
      - Replace `ANTHROPIC_API_KEY` with their chosen provider's secret name
      - Adjust skill paths to match their project layout
@@ -152,6 +155,7 @@ Config shape:
 
 - `skills/rco-setup/assets/.rco/`: Complete `.rco/` directory containing `config.json` and `REVIEW.md`. Copied to the project root when `.rco/` does not already exist.
 - `skills/rco-setup/assets/.github/workflows/nightly-review.yml`: Nightly review workflow **template**. Copied to the project root when the user opts in during setup. Must be adapted before use — provider secret name, skill paths, and pi flags are placeholders.
+- `skills/rco-setup/assets/.github/workflows/pr-review.yml`: PR review workflow **template**. Triggers on PR open/update and `/review` keyword. Same adaptation requirements as above.
 
 ## Agent Feedback Loop
 

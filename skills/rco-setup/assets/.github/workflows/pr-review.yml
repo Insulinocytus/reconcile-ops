@@ -1,0 +1,56 @@
+# PR Review Workflow Template
+#
+# Adapt before use:
+#   1. Replace <PROVIDER>_API_KEY with your chosen provider (ANTHROPIC_API_KEY, OPENAI_API_KEY, etc.)
+#   2. Adjust skill paths to match your project layout
+#   3. Adjust pi flags (model, thinking level, etc.) to your preference
+#   4. Adjust comment-trigger keyword if desired (default: /review)
+#
+# Required secrets:
+#   - API key for your chosen LLM provider
+
+name: PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+  issue_comment:
+    types: [created]
+
+jobs:
+  pr-review:
+    # Only run on PRs (not plain issues) and only when:
+    # - PR is opened or updated, OR
+    # - Someone comments /review on a PR
+    if: >
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.pull_request != null &&
+       contains(github.event.comment.body, '/review'))
+
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Install mise and tools
+        uses: jdx/mise-action@v4
+        with:
+          install: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run PR review
+        env:
+          # Replace with your provider's API key secret name
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          # Adjust --model, --thinking, --skill path as needed
+          pi -p --no-extensions \
+            --skill skills/rco-review-pr/SKILL.md \
+            "Review PR #${{ github.event.pull_request.number }}. Trigger mode: PR Actions."
