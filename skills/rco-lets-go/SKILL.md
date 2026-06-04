@@ -30,11 +30,12 @@ the routing table, and invoke exactly one skill. Do not invoke multiple skills a
 | Consolidate closed ADR Issues into `docs/adr.md` | `rco-create-adr-md` |
 | Submit changes as a PR with reviewer assignment | `rco-create-pr` |
 | Run a drift inspection across Goals, Issues, PRs, and ADR records | `rco-nightly-inspect` |
+| Detect spaghetti code — structure smells, duplication, naming, dead code, error handling, hardcoding, type safety, dependency issues, security, performance | `rco-review-spaghetti` |
 
 ## Routing Rules
 
 - If the user's intent matches exactly one row, invoke that skill.
-- If the user's intent matches multiple rows, ask the user to clarify which one first. Suggest the one that is earliest in the normal workflow order: setup → distill-req → define-goal → create-goal-issue → create-pr → nightly-inspect. ADR skills are independent of this order.
+- If the user's intent matches multiple rows, ask the user to clarify which one first. Suggest the one that is earliest in the normal workflow order: setup → distill-req → define-goal → create-goal-issue → create-pr → nightly-inspect. ADR and spaghetti-review skills are independent of this order.
 - If the user's intent matches no row, tell the user that no RCO skill covers this and explain what the available skills handle.
 - If `.rco/config.json` does not exist, always route to `rco-setup` regardless of the user's intent.
 - Do not invoke multiple skills at once. Complete one before suggesting the next.
@@ -53,6 +54,7 @@ After a skill completes, suggest the next skill in the workflow if the output na
 | `rco-create-adr-md` | `rco-create-pr` (commit docs/adr.md) |
 | `rco-create-pr` | (none — PR is submitted) |
 | `rco-nightly-inspect` | Whatever skill the drift findings point to |
+| `rco-review-spaghetti` | Whatever skill the findings point to (e.g., `rco-create-pr` for a fix) |
 
 Suggestions are optional. Do not force the user into the next step.
 
