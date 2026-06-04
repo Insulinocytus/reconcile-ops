@@ -1,6 +1,6 @@
 ---
 name: rco-review-pr
-description: Use when a PR needs multi-axis code review before merge — covers correctness, readability, architecture, security, and performance plus any project-specific review dimensions defined in .rco/REVIEW.md. Designed for GitHub Actions PR triggers and manual invocation.
+description: Use when a PR needs review before merge — correctness gaps, readability problems, architectural mismatches, security vulnerabilities, performance hazards, or violations of project-specific review rules in .rco/REVIEW.md.
 ---
 
 # RCO Review PR
@@ -202,49 +202,20 @@ When a change is too large, suggest splitting:
 
 Post a summary comment and inline review comments on the PR.
 
-**Summary comment:**
+**Summary comment** format: severity count header, then Critical/Required in tables, Nit/Optional/FYI as bullets, custom dimensions in table, verdict line.
 
-```md
+```
 ## PR Review: 🔴 X Critical | Y Required | Z Nit | W Optional
 
-### 🔴 Critical
-
-| # | Axis | File | Line | Issue |
-|---|------|------|------|-------|
-| 1 | D4 Security | `src/auth.ts` | 42 | SQL string concatenation — injection risk. Use parameterized queries. |
-
-### Required
-
-| # | Axis | File | Line | Issue |
-|---|------|------|------|-------|
-| 1 | D1 Correctness | `src/api.ts` | 15 | Null check missing before accessing `user.id`. |
-
-### Nit / Optional / FYI
-
-- D2 Readability: `src/utils.ts:33` — Variable `tmp2` could be more descriptive. *(Nit)*
-- D5 Performance: `src/orders.ts:88` — Consider batching the queries. *(Optional)*
-
-### Custom Dimensions (from .rco/REVIEW.md)
-
-| # | Axis | File | Line | Issue |
-|---|------|------|------|-------|
-| 1 | D6 API Contract | `src/routes.ts` | 12 | New endpoint missing OpenAPI schema. *(Required)* |
-
-**Verdict:** Request changes — X Critical + Y Required issues must be addressed.
+### 🔴 Critical / Required: tables with # | Axis | File | Line | Issue
+### Nit / Optional / FYI: bullets with axis prefix and label
+### Custom Dimensions (from .rco/REVIEW.md): table if findings, "No findings." if none
+**Verdict:** Approve / Request changes
 ```
 
-**Inline review comments** — for Critical and Required findings only. Nit/Optional/FYI appear only in summary.
-
-```bash
-gh api repos/{owner}/{repo}/pulls/{number}/comments \
-  --method POST \
-  --field path="<file-path>" \
-  --field line=<line-number> \
-  --field side="RIGHT" \
-  --field body="<severity-label> **<Axis>**: <issue>. <suggestion>."
-```
-
-If inline comment posting fails, include the finding in the summary with file and line info.
+**Inline review comments** — Critical and Required findings only. Nit/Optional/FYI in summary only.
+  Use `gh api repos/{owner}/{repo}/pulls/{number}/comments` (see Implementation Templates).
+  If inline posting fails, include the finding in the summary with file and line info.
 
 **Do not modify PR check status.**
 
@@ -254,11 +225,7 @@ If inline comment posting fails, include the finding in the summary with file an
 
 ## Change Descriptions (Meta-Review)
 
-If the PR description is missing or inadequate, flag it. Every change needs a description that stands alone in version control history:
-
-- **First line:** Short, imperative, standalone. "Delete the FizzBuzz RPC" not "Deleting the FizzBuzz RPC."
-- **Body:** What is changing and why. Include context, decisions, and reasoning not visible in the code itself.
-- **Anti-patterns:** "Fix bug", "Fix build", "Add patch", "Moving code from A to B", "Phase 1".
+If the PR description is missing or inadequate, flag it as a Required finding.
 
 ## Honesty in Review
 
