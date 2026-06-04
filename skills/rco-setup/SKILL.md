@@ -19,6 +19,7 @@ configuration.
 - Repairing missing or incomplete `.rco/config.json`
 - Adding or updating `pr_reviewers` scope configuration
 - Ensuring required tools are available
+- Optionally installing the nightly review GitHub Actions workflow
 
 ## Core Principles
 
@@ -93,7 +94,20 @@ configuration.
 
 5. Write `.rco/config.json` with all collected values.
 
-6. Verify configuration completeness.
+6. Ask the user whether to install the nightly review GitHub Actions workflow:
+   - If yes, check whether `.github/workflows/nightly-review.yml` already exists.
+   - If it does not exist, copy from assets:
+
+   ```bash
+   mkdir -p .github/workflows
+   cp skills/rco-setup/assets/.github/workflows/nightly-review.yml .github/workflows/
+   ```
+
+   - If it already exists, skip and inform the user.
+   - If the user declines, skip without warning.
+   - Remind the user that `ANTHROPIC_API_KEY` must be configured as a repository secret for the workflow to run.
+
+7. Verify configuration completeness.
 
 ## Implementation Templates
 
@@ -132,6 +146,7 @@ Config shape:
 ## Bundled Resources
 
 - `skills/rco-setup/assets/.rco/`: Complete `.rco/` directory containing `config.json` and `REVIEW.md`. Copied to the project root when `.rco/` does not already exist.
+- `skills/rco-setup/assets/.github/workflows/nightly-review.yml`: Nightly review workflow. Copied to the project root when the user opts in during setup.
 
 ## Agent Feedback Loop
 
@@ -146,6 +161,8 @@ After the user installs the missing dependency, re-run the failed setup step.
 | "Run non-idempotent commands." | Check the current state first and skip already-correct steps. |
 | "Overwrite .rco/ to update it." | Do not overwrite an existing `.rco/` directory. |
 | "Skip pr_reviewers, add it later." | Scope-to-reviewer mapping is essential for PR creation. At minimum configure the scopes the project uses. |
+| "Install the workflow without asking." | The workflow is optional — the user may have their own CI/CD solution. Ask first. |
+| "Overwrite the existing workflow." | Do not overwrite an existing `.github/workflows/nightly-review.yml`. |
 
 ## Red Flags
 
@@ -168,4 +185,6 @@ After the user installs the missing dependency, re-run the failed setup step.
 - [ ] `.rco/REVIEW.md` exists (optional — not required for setup to pass)
 - [ ] `branch_prefix` ends with `/`
 - [ ] `pr_reviewers` has at least one scope configured (or user explicitly declined)
+- [ ] If user opted in, `.github/workflows/nightly-review.yml` was copied (or already existed)
+- [ ] If user opted in, user was reminded to configure `ANTHROPIC_API_KEY` secret
 - [ ] Re-running setup skips already-correct steps
