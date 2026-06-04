@@ -1,6 +1,6 @@
 ---
 name: rco-review-spaghetti
-description: Use when code has structure smells, duplication, bad naming, dead code, swallowed errors, hardcoded secrets, type unsafety, stale dependencies, security vulnerabilities, or performance hazards. Works on PRs, diffs, uncommitted changes, or full repository scans.
+description: Use when code has structure smells, duplication, bad naming, dead code, swallowed errors, hardcoded secrets, type unsafety, stale dependencies, security vulnerabilities, or performance hazards.
 ---
 
 # RCO Review Spaghetti
@@ -19,6 +19,11 @@ findings, never modify code.
 - PR opened or updated (GitHub Actions)
 - `/review` keyword in PR or Issue comment (GitHub Actions)
 - Nightly full-repository scan running alongside `rco-nightly-inspect`
+
+### When NOT to Use
+
+- Development efficiency / project-level toil → use `rco-review-toil`
+- Drift alignment between Goals, Issues, PRs, ADRs → use `rco-nightly-inspect`
 
 ## Core Principles
 
@@ -49,20 +54,7 @@ findings, never modify code.
 | Comment `/review` on Issue | Keyword in Issue comment | All source files in repository |
 | Nightly scan | Scheduled or manual full scan | All source files in repository |
 
-3. Collect the code to review:
-
-```bash
-# PR diff
-gh pr diff <number>
-
-# Uncommitted changes
-git diff
-git diff --cached
-
-# Full repository source files
-find . -type f \( -name '*.ts' -o -name '*.js' -o -name '*.py' -o -name '*.go' -o -name '*.rs' -o -name '*.java' -o -name '*.rb' \) \
-  ! -path '*/node_modules/*' ! -path '*/vendor/*' ! -path '*/.git/*' ! -path '*/dist/*' ! -path '*/build/*'
-```
+3. Collect the code to review using the commands in Implementation Templates.
 
 4. Run all ten detection dimensions against the collected code. Every dimension must produce findings or explicitly state "No findings." Never omit a dimension from the output.
 
@@ -151,109 +143,40 @@ find . -type f \( -name '*.ts' -o -name '*.js' -o -name '*.py' -o -name '*.go' -
 
 ### PR Trigger Output
 
-Post a summary comment on the PR and inline review comments for 🔴 and 🟡 findings.
+Post a summary comment and inline review comments.
 
-Summary comment:
+**Summary comment** — severity count header, then findings in tables by severity:
 
 ```md
 ## Code Review: 🔴 X Critical | 🟡 Y Warning | 🟢 Z Suggestion
 
 ### 🔴 Critical
-
 | # | Dimension | File | Line | Issue |
 |---|-----------|------|------|-------|
 | 1 | D9 Security | `src/auth/login.ts` | 42 | SQL string concatenation — injection risk. Use parameterized queries. |
-| 2 | D6 Hardcoding | `src/config.ts` | 8 | Hardcoded API key. Move to environment variable. |
 
 ### 🟡 Warning
-
 | # | Dimension | File | Line | Issue |
 |---|-----------|------|------|-------|
 | 1 | D1 Structure | `src/api/users.ts` | 15-120 | Function `handleUsers` is 105 lines. Break into focused functions. |
 
 ### 🟢 Suggestion
-
 | # | Dimension | File | Line | Issue |
 |---|-----------|------|------|-------|
 | 1 | D3 Naming | `src/utils.ts` | 33 | Variable `tmp2` is meaningless. Use a descriptive name. |
 ```
 
-Inline review comments for 🔴 and 🟡 only (🟢 appears only in summary):
-
-```bash
-gh api repos/{owner}/{repo}/pulls/{pr-number}/comments \
-  --method POST \
-  --field path="<file-path>" \
-  --field line=<line-number> \
-  --field side="RIGHT" \
-  --field body="🔴 **D9 Security**: SQL string concatenation — use parameterized queries.
-
-\`\`\`ts
-await db.query('SELECT * FROM users WHERE id = $1', [userId])
-\`\`\`"
-```
-
-If inline comment posting fails (line position mismatch), include the finding in the summary comment with file and line info.
+**Inline review comments** — 🔴 and 🟡 only. 🟢 appears only in summary.
+  Use `gh api repos/{owner}/{repo}/pulls/{number}/comments` (see Implementation Templates).
+  If inline posting fails, include the finding in the summary with file and line info.
 
 **Do not modify PR check status.**
 
 ### Nightly Scan Output
 
-Create a GitHub Issue with no label:
-
-```bash
-gh issue create \
-  --title "[Code Review] $(date +%Y-%m-%d)" \
-  --body-file <report-file>
-```
-
-Issue body:
-
-```md
-# Code Review Report — YYYY-MM-DD
-
-## 🔴 Critical: X
-
-### D6: Hardcoding
-
-- `src/config.ts:8` — Hardcoded API key. Move to environment variable.
-
-### D9: Security
-
-- `src/auth/login.ts:42` — SQL string concatenation. Use parameterized queries.
-
-## 🟡 Warning: Y
-
-### D1: Structure Smells
-
-- `src/api/users.ts:15-120` — Function `handleUsers` is 105 lines. Break into focused functions.
-
-### D4: Dead Code
-
-- `src/legacy.ts:200-250` — 50 lines of commented-out code. Remove or extract.
-
-(Continue for all dimensions with findings)
-
-### D2: Duplication
-
-No findings.
-
-### D3: Naming Quality
-
-No findings.
-
-(all ten dimensions must appear, even if "No findings.")
-
-## 🟢 Suggestion: Z
-
-### D3: Naming Quality
-
-- `src/utils.ts:33` — Variable `tmp2` is meaningless. Use a descriptive name.
-
----
-
-**Total: 🔴 X | 🟡 Y | 🟢 Z**
-```
+Create a GitHub Issue with title `[Code Review] YYYY-MM-DD`, no label.
+  Body format: group by severity, then by dimension. All ten dimensions must appear, even if "No findings."
+  End with `**Total: 🔴 X | 🟡 Y | 🟢 Z**`. See Implementation Templates for commands.
 
 ### Manual Trigger Output
 
