@@ -31,6 +31,7 @@ the routing table, and invoke exactly one skill. Do not invoke multiple skills a
 | Submit changes as a PR with reviewer assignment | `rco-create-pr` |
 | Run a drift inspection across Goals, Issues, PRs, and ADR records | `rco-nightly-inspect` |
 | Detect spaghetti code — structure smells, duplication, naming, dead code, error handling, hardcoding, type safety, dependency issues, security, performance | `rco-review-spaghetti` |
+| Detect development toil — things people must remember, repeat, manually detect, or bridge between disconnected tools | `rco-review-toil` |
 
 ## Routing Rules
 
@@ -55,6 +56,7 @@ After a skill completes, suggest the next skill in the workflow if the output na
 | `rco-create-pr` | (none — PR is submitted) |
 | `rco-nightly-inspect` | Whatever skill the drift findings point to |
 | `rco-review-spaghetti` | Whatever skill the findings point to (e.g., `rco-create-pr` for a fix) |
+| `rco-review-toil` | Whatever skill the findings point to (e.g., `rco-setup` to add tooling, `rco-create-pr` for config changes) |
 
 Suggestions are optional. Do not force the user into the next step.
 
