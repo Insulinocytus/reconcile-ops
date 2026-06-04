@@ -13,14 +13,14 @@ name: PR Review
 
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [opened, ready_for_review, reopened]
   issue_comment:
     types: [created]
 
 jobs:
   pr-review:
     # Only run on PRs (not plain issues) and only when:
-    # - PR is opened or updated, OR
+    # - PR is opened, reopened, or marked ready for review, OR
     # - A human (not a bot) comments /review on a PR
     if: >
       github.event_name == 'pull_request' ||
@@ -28,6 +28,10 @@ jobs:
        github.event.issue.pull_request != null &&
        github.event.comment.user.type != 'Bot' &&
        contains(github.event.comment.body, '/review'))
+
+    concurrency:
+      group: pr-review-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
 
     runs-on: ubuntu-latest
     permissions:
