@@ -17,11 +17,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install mise
-        uses: jdx/mise-action@v2
-
-      - name: Install tools via mise
-        run: mise install
+      - name: Install mise and tools
+        uses: jdx/mise-action@v4
+        with:
+          install: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run drift inspection
         env:
