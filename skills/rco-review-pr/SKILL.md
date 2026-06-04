@@ -9,7 +9,7 @@ Before doing any work, read `.rco/config.json` unless already read in this sessi
 
 ## Overview
 
-Multi-dimensional PR review with built-in five axes plus project-specific custom dimensions
+Multi-dimensional PR review with built-in six axes plus project-specific custom dimensions
 from `.rco/REVIEW.md`. Every PR gets reviewed before merge. Review is read-only — report
 findings, never modify code or PR check status.
 
@@ -33,7 +33,7 @@ it improves the codebase and follows project conventions, approve.
 ## Core Principles
 
 - **Review is read-only.** Post comments; do not modify code, files, or PR check status.
-- **All five built-in axes are always checked.** Do not skip any axis.
+- **All six built-in axes are always checked.** Do not skip any axis.
 - **Custom dimensions from `.rco/REVIEW.md` are always checked if the file exists.**
 - **Every finding is labeled with severity.** Required changes have no prefix. Optional changes are labeled.
 - **PR scope only.** Review the diff, not the entire repository.
@@ -95,29 +95,38 @@ Does the change introduce performance problems?
 - Pagination on list endpoints
 - No large objects created in hot paths
 
+### 6. ADR Adherence
+
+Does the code comply with the architectural decisions recorded as Active in `docs/adr.md`?
+
+- Code changes must not contradict consequences of active ADRs
+- Technology choices, infrastructure patterns, data models, and module contracts in the diff must align with currently effective ADR consequences
+- If a change violates an active ADR, it must either supersede the ADR (via a new ADR Issue) before merge or be flagged as a violation
+- When `docs/adr.md` does not exist or has no active entries, this axis has no findings
+
 ## Custom Dimensions (.rco/REVIEW.md)
 
 If `.rco/REVIEW.md` exists, read it and add its dimensions to the review. The file defines
-project-specific review axes that go beyond the five built-in axes.
+project-specific review axes that go beyond the six built-in axes.
 
 **File format:**
 
 ```md
 # Project Review Dimensions
 
-## D6: API Contract Compliance
+## D7: API Contract Compliance
 
 - All API endpoints must have OpenAPI schema
 - Response shapes must match the schema in docs/api.yaml
 - No new endpoints without schema updates
 
-## D7: Database Migration Safety
+## D8: Database Migration Safety
 
 - No raw ALTER TABLE without down migration
 - New columns must have defaults or be nullable
 - Index additions must include CONCURRENTLY
 
-## D8: Error Code Consistency
+## D9: Error Code Consistency
 
 - All error responses must use the standard error envelope
 - Error codes must be registered in docs/error-codes.md
@@ -125,7 +134,7 @@ project-specific review axes that go beyond the five built-in axes.
 ```
 
 **Rules:**
-- Dimension IDs continue from D5 (built-in axes are D1–D5). Start custom dimensions at D6.
+- Dimension IDs continue from D6 (built-in axes are D1–D6). Start custom dimensions at D7.
 - Each dimension has a title and bullet points defining what to check.
 - If `.rco/REVIEW.md` does not exist, skip custom dimensions. Do not warn about its absence.
 - If `.rco/REVIEW.md` exists but is empty or has no dimension sections, skip custom dimensions.
@@ -171,7 +180,8 @@ Walk through the diff with all axes in mind. For each file changed:
 3. Architecture: Does this fit the system?
 4. Security: Any vulnerabilities?
 5. Performance: Any bottlenecks?
-6. (D6, D7, ...): Custom dimensions from `.rco/REVIEW.md`
+6. ADR Adherence: Does the code comply with active ADRs in `docs/adr.md`?
+7. (D7, D8, ...): Custom dimensions from `.rco/REVIEW.md`
 
 ### Step 4: Categorize Findings
 
@@ -312,7 +322,7 @@ If inline comment posting fails, fall back to including the finding in the summa
 
 - [ ] `.rco/config.json` was read
 - [ ] If `.rco/config.json` was missing, user was told to run `rco-setup`
-- [ ] All five built-in axes appear in the output (even if "No findings.")
+- [ ] All six built-in axes appear in the output (even if "No findings.")
 - [ ] If `.rco/REVIEW.md` exists, all custom dimensions appear in the output
 - [ ] If `.rco/REVIEW.md` does not exist, no warning about its absence
 - [ ] Each finding has a severity label
