@@ -1,0 +1,48 @@
+name: Nightly Review
+
+on:
+  schedule:
+    - cron: '0 3 * * *'  # 03:00 UTC every day
+  workflow_dispatch:       # manual trigger
+
+jobs:
+  nightly-review:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install mise
+        uses: jdx/mise-action@v2
+
+      - name: Install tools via mise
+        run: mise install
+
+      - name: Run drift inspection
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          pi -p --no-extensions \
+            --skill skills/rco-nightly-inspect/SKILL.md \
+            "Run the nightly drift inspection for this repository."
+
+      - name: Run spaghetti code review
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          pi -p --no-extensions \
+            --skill skills/rco-review-spaghetti/SKILL.md \
+            "Run a full repository spaghetti code review. Trigger mode: nightly scan."
+
+      - name: Run toil review
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          pi -p --no-extensions \
+            --skill skills/rco-review-toil/SKILL.md \
+            "Run a full repository toil review. Trigger mode: nightly scan."
