@@ -105,7 +105,12 @@ configuration.
 
    - If it already exists, skip and inform the user.
    - If the user declines, skip without warning.
-   - Remind the user that `ANTHROPIC_API_KEY` must be configured as a repository secret for the workflow to run.
+   - **Tell the user this is a template, not a ready-to-run workflow.** They must adapt:
+     - Replace `ANTHROPIC_API_KEY` with their chosen provider's secret name
+     - Adjust skill paths to match their project layout
+     - Adjust pi flags (model, thinking level) to their preference
+     - Add or remove review steps as needed
+   - After the user adapts the file, remind them to configure the API key as a repository secret.
 
 7. Verify configuration completeness.
 
@@ -146,7 +151,7 @@ Config shape:
 ## Bundled Resources
 
 - `skills/rco-setup/assets/.rco/`: Complete `.rco/` directory containing `config.json` and `REVIEW.md`. Copied to the project root when `.rco/` does not already exist.
-- `skills/rco-setup/assets/.github/workflows/nightly-review.yml`: Nightly review workflow. Copied to the project root when the user opts in during setup.
+- `skills/rco-setup/assets/.github/workflows/nightly-review.yml`: Nightly review workflow **template**. Copied to the project root when the user opts in during setup. Must be adapted before use — provider secret name, skill paths, and pi flags are placeholders.
 
 ## Agent Feedback Loop
 
@@ -163,6 +168,7 @@ After the user installs the missing dependency, re-run the failed setup step.
 | "Skip pr_reviewers, add it later." | Scope-to-reviewer mapping is essential for PR creation. At minimum configure the scopes the project uses. |
 | "Install the workflow without asking." | The workflow is optional — the user may have their own CI/CD solution. Ask first. |
 | "Overwrite the existing workflow." | Do not overwrite an existing `.github/workflows/nightly-review.yml`. |
+| "The workflow is ready to run after setup." | It is a template. The user must adapt provider secrets, skill paths, and pi flags before it can run. |
 
 ## Red Flags
 
@@ -186,5 +192,6 @@ After the user installs the missing dependency, re-run the failed setup step.
 - [ ] `branch_prefix` ends with `/`
 - [ ] `pr_reviewers` has at least one scope configured (or user explicitly declined)
 - [ ] If user opted in, `.github/workflows/nightly-review.yml` was copied (or already existed)
-- [ ] If user opted in, user was reminded to configure `ANTHROPIC_API_KEY` secret
+- [ ] If user opted in, user was told the workflow is a template and must be adapted
+- [ ] If user opted in, user was reminded to configure API key secret after adapting
 - [ ] Re-running setup skips already-correct steps

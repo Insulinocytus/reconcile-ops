@@ -1,3 +1,14 @@
+# Nightly Review Workflow Template
+#
+# Adapt before use:
+#   1. Replace <PROVIDER>_API_KEY with your chosen provider (ANTHROPIC_API_KEY, OPENAI_API_KEY, etc.)
+#   2. Adjust skill paths to match your project layout
+#   3. Adjust pi flags (model, thinking level, etc.) to your preference
+#   4. Remove or add review steps as needed
+#
+# Required secrets:
+#   - API key for your chosen LLM provider
+
 name: Nightly Review
 
 on:
@@ -25,8 +36,10 @@ jobs:
 
       - name: Run drift inspection
         env:
+          # Replace with your provider's API key secret name
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
+          # Adjust --model, --thinking, --skill path as needed
           pi -p --no-extensions \
             --skill skills/rco-nightly-inspect/SKILL.md \
             "Run the nightly drift inspection for this repository."
