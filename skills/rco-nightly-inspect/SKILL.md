@@ -42,12 +42,12 @@ Collect all Goal files and all Goal Issues, then compare:
 rg -o 'G-[0-9]{6}' docs/goals --no-filename | sort -u
 
 # Goal Issues
-gh issue list --search 'G- in:title' --state all --json number,title,state
+gh issue list --label goal --state all --json number,title,state
 ```
 
 Findings:
 - Goal file has no corresponding Issue → create Issue (per `rco-create-goal-issue` rules)
-- Issue title contains `[G-XXXXXX]` but no Goal file exists → flag as dangling Issue
+- Goal Issue has no corresponding Goal file → flag as dangling Issue
 - Goal file has `> **Superseded**` but Issue status is not Superseded → flag status mismatch
 - Issue status is Superseded but Goal file has no Superseded marker → flag status mismatch
 
@@ -56,7 +56,7 @@ Findings:
 Compare each Goal file's `## Acceptance Criteria` list with the corresponding Goal Issue's `## Acceptance Criteria` checklist.
 
 ```bash
-gh issue list --search 'G- in:title' --state all --json number,title,body,state
+gh issue list --label goal --state all --json number,title,body,state
 ```
 
 Findings:
@@ -74,7 +74,7 @@ Rules:
 ### Check 3: Goal Issue Missing Milestone
 
 ```bash
-gh issue list --search 'G- in:title' --state all --json number,title,milestone
+gh issue list --label goal --state all --json number,title,milestone
 ```
 
 Findings:

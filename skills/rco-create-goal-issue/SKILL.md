@@ -23,11 +23,12 @@ checklist so PMs can see progress without creating speculative task Issues.
 
 ## Core Principles
 
+- Goal Issues use the label `goal`.
 - Issue title format is `[G-000001] Goal Title`.
 - Issue body contains only a Goal file link, an Acceptance Criteria checklist copied from the Goal file, and a PRs section. No source requirements, background, status, owner, deadline, scope, or implementation tasks.
 - The Goal file is the canonical source of Acceptance Criteria. The Issue checklist is the progress view that humans manually check off.
 - This skill creates Issues from scratch. `rco-create-pr` is responsible for appending PR links to existing Issue bodies. This skill never appends PR links.
-- A Goal maps to exactly one GitHub Project issue. Find the issue by searching for `[G-XXXXXX]` in the title.
+- A Goal maps to exactly one GitHub Project issue. Find the issue by searching with `--label goal`.
 - GitHub Project owns status (Todo / In Progress / Done / Superseded).
 - GitHub Milestone owns deadline.
 - If a Goal file has `> **Superseded**`, set the issue status to Superseded.
@@ -39,9 +40,16 @@ checklist so PMs can see progress without creating speculative task Issues.
 3. For each `G-*.md`, parse the first heading after any Superseded marker:
    - `# G-000001: Goal Title`
 4. Parse every plain list item under `## Acceptance Criteria`. Preserve order and text exactly.
-5. Check whether an issue already exists with title starting with `[G-000001]`.
-6. If no issue exists, create one:
+5. Ensure the `goal` label exists in the repository. If not, create it:
+
+```bash
+gh label list --json name --jq '.[].name' | grep -qx goal || gh label create goal --description 'Goal issue' --color '0E8A16'
+```
+
+6. Check whether an issue already exists for this Goal ID by searching with `--label goal`.
+7. If no issue exists, create one:
    - title: `[G-000001] Goal Title`
+   - label: `goal`
    - body:
 
 ```md
@@ -55,10 +63,10 @@ Goal: <default-branch-link-to-docs/goals/G-000001.md>
 PRs:
 ```
 
-7. If an issue already exists, compare its Acceptance Criteria checklist with the Goal file Acceptance Criteria. Report any drift, but do not rewrite the existing issue.
-8. Add the issue to the GitHub Project when `github_project_id` is present in `.rco/config.json`. If `github_project_id` is empty, skip this step.
-9. If the Goal file has `> **Superseded**`, set the issue status to Superseded.
-10. Skip existing issues without changing them, except for Superseded status handling when required.
+8. If an issue already exists, compare its Acceptance Criteria checklist with the Goal file Acceptance Criteria. Report any drift, but do not rewrite the existing issue.
+9. Add the issue to the GitHub Project when `github_project_id` is present in `.rco/config.json`. If `github_project_id` is empty, skip this step.
+10. If the Goal file has `> **Superseded**`, set the issue status to Superseded.
+11. Skip existing issues without changing them, except for Superseded status handling when required.
 
 ## Implementation Templates
 
@@ -80,8 +88,9 @@ Useful `gh` commands:
 
 ```bash
 gh repo view --json nameWithOwner,defaultBranchRef
-gh issue list --search 'G-000001 in:title' --json number,title,id,url
-gh issue create --title '[G-000001] Goal Title' --body 'Goal: https://github.com/OWNER/REPO/blob/main/docs/goals/G-000001.md
+gh label list --json name --jq '.[].name' | grep -qx goal || gh label create goal --description 'Goal issue' --color '0E8A16'
+gh issue list --label goal --search 'G-000001' --json number,title,id,url
+gh issue create --title '[G-000001] Goal Title' --label goal --body 'Goal: https://github.com/OWNER/REPO/blob/main/docs/goals/G-000001.md
 
 ## Acceptance Criteria
 
@@ -111,6 +120,7 @@ tell the user to run `rco-setup` to configure the project.
 
 ## Red Flags
 
+- Goal Issue is missing the `goal` label
 - Issue title does not start with `[G-000001]`
 - Issue body duplicates Goal source requirements, context, scope, or status metadata
 - Issue body is missing the Acceptance Criteria checklist
@@ -127,6 +137,8 @@ tell the user to run `rco-setup` to configure the project.
 - [ ] Goal ID and title were parsed from the Goal heading
 - [ ] Acceptance Criteria were parsed from the Goal file
 - [ ] Existing issues were checked before creation
+- [ ] The `goal` label exists in the repository
+- [ ] Created issue has the `goal` label
 - [ ] Created issue title uses `[G-000001] Goal Title`
 - [ ] Created issue body contains only Goal link, Acceptance Criteria checklist, and PRs section
 - [ ] Checklist items preserve Goal file Acceptance Criteria text and order
