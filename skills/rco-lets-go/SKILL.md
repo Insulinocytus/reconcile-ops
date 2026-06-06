@@ -31,7 +31,8 @@ the routing table, and invoke exactly one skill. Do not invoke multiple skills a
 | Submit changes as a PR with reviewer assignment | `rco-create-pr` |
 | Run a drift inspection across Goals, Issues, PRs, and ADR records | `rco-nightly-inspect` |
 | Detect spaghetti code — structure smells, duplication, naming, dead code, error handling, hardcoding, type safety, dependency issues, security, performance | `rco-review-spaghetti` |
-| Detect development toil — things people must remember, repeat, manually detect, or bridge between disconnected tools | `rco-review-toil` |
+| Create a non-Goal, non-ADR GitHub Issue (bug, feature, chore, refactor) | `rco-create-issue` |
+| Detect development toil — things people must remember, repeat, manually detect, or bridge between tools | `rco-review-toil` |
 | PR review before merge — five-axis code quality (correctness, readability, architecture, security, performance) plus project-specific dimensions from .rco/REVIEW.md | `rco-review-pr` |
 
 ## Routing Rules
@@ -57,7 +58,7 @@ After a skill completes, suggest the next skill in the workflow if the output na
 | `rco-create-pr` | (none — PR is submitted) |
 | `rco-nightly-inspect` | Whatever skill the drift findings point to |
 | `rco-review-spaghetti` | Whatever skill the findings point to (e.g., `rco-create-pr` for a fix) |
-| `rco-review-toil` | Whatever skill the findings point to (e.g., `rco-setup` to add tooling, `rco-create-pr` for config changes) |
+| `rco-review-toil` | Whatever skill the findings point to (e.g., `rco-setup` for tooling, `rco-create-pr` for config) |
 | `rco-review-pr` | `rco-create-pr` (if review findings lead to a fix PR) |
 
 Suggestions are optional. Do not force the user into the next step.

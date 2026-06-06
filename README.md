@@ -139,10 +139,11 @@ PRs:
 | **rco-setup** | 项目初始化 | 初始化 `.rco/`、安装工具链、配置 GitHub Actions |
 | **rco-distill-req** | 收到原始输入（会议纪要、访谈录音等） | 整理为结构化需求文档 |
 | **rco-define-goal** | 需求稳定后 | 产出 Goal 文件（验收标准 + 来源引用） |
-| **rco-create-goal-issue** | Goal 文件合入主分支后 | 为 Goal 创建带 AC checklist 的 GitHub Issue |
+| **rco-create-goal-issue** | Goal 文件合入主分支后 | 为 Goal 创建带 AC checklist 的 Issue |
+| **rco-create-issue** | 创建非 Goal / 非 ADR 的通用 Issue | Why / TODO / References 三段式 |
 | **rco-create-pr** | 变更准备提交 | 创建 PR、匹配 reviewer、关联 Goal |
 | **rco-review-pr** | PR 需审查时 | 六轴 + 自定义维度审查 |
-| **rco-create-adr-issue** | 需要记录或推翻架构决策 | 创建 ADR Issue（`adr` 标签） |
+| **rco-create-adr-issue** | 需要记录/推翻架构决策 | 创建 ADR Issue（`adr` 标签） |
 | **rco-create-adr-md** | 闭合 ADR Issue 积累后 | 汇总已关闭 ADR 到 `docs/adr.md` |
 | **rco-review-spaghetti** | 代码质量审查 | 10 维度代码质量扫描 |
 | **rco-review-toil** | 团队被手动流程拖累时 | 检测 toil（可自动化的重复劳动） |
