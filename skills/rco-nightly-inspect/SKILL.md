@@ -21,14 +21,15 @@ artifacts directly.
 
 ## Core Principles
 
-- Inspect is read-only. Create new issues to flag drift; do not modify existing files, issues, or PRs.
-- Only check what the three baselines require. Do not add speculative checks.
+- Inspect is read-only. Create new issues to flag drift; do not modify existing files, existing issues, or PRs.
+- Inspect must not edit existing Goal Issues, including Acceptance Criteria checklist items. It only reports drift and creates compensating `drift` issues.
+- Only check the baseline drift categories defined here. Do not add speculative checks.
 - An orphan PR is only a PR that directly advances a Goal's implementation but lacks a Goal link. Maintenance PRs (CI, typo, tooling, config) are not orphans.
 
 ## Standard Workflow
 
 1. Read `.rco/config.json` unless already read in this session. If it does not exist, stop and tell the user to run `rco-setup` first.
-2. Run all four checks. Collect findings into a single drift report.
+2. Run all five checks. Collect findings into a single drift report.
 3. For each finding, create a compensating issue labeled `drift` with a description of the misalignment and a suggested fix.
 4. Report the total findings and issue URLs.
 
@@ -50,7 +51,27 @@ Findings:
 - Goal file has `> **Superseded**` but Issue status is not Superseded → flag status mismatch
 - Issue status is Superseded but Goal file has no Superseded marker → flag status mismatch
 
-### Check 2: Goal Issue Missing Milestone
+### Check 2: Goal Acceptance Criteria Drift
+
+Compare each Goal file's `## Acceptance Criteria` list with the corresponding Goal Issue's `## Acceptance Criteria` checklist.
+
+```bash
+gh issue list --search 'G- in:title' --state all --json number,title,body,state
+```
+
+Findings:
+- Goal file Acceptance Criteria item has no matching Issue checklist item → flag as missing checklist item
+- Issue checklist item has no matching Goal file Acceptance Criteria item → flag as stale checklist item
+- Matching item text differs between Goal file and Issue checklist → flag as text drift
+- Issue is missing an Acceptance Criteria checklist section → flag as missing checklist
+
+Rules:
+- Do not edit the Goal Issue body.
+- Do not check or uncheck checklist items.
+- Do not delete stale checklist items.
+- If automatic synchronization is needed, tell the user to use a separate sync skill; nightly inspect only reports drift.
+
+### Check 3: Goal Issue Missing Milestone
 
 ```bash
 gh issue list --search 'G- in:title' --state all --json number,title,milestone
@@ -59,7 +80,7 @@ gh issue list --search 'G- in:title' --state all --json number,title,milestone
 Findings:
 - Goal Issue has no milestone → flag as missing deadline
 
-### Check 3: Orphan PR
+### Check 4: Orphan PR
 
 List recently closed PRs (last 3 days):
 
@@ -69,7 +90,7 @@ gh pr list --state closed --search "closed:>=3 days ago" --json number,title,bod
 
 For each PR, determine whether it directly advances a Goal's implementation. A PR that only changes documentation (Goals, requirements, ADRs, README, config), CI/CD, typo fixes, or tooling is NOT an implementation PR. If an implementation PR's body does not contain a `#` reference to a Goal Issue, flag it as orphan.
 
-### Check 4: docs/adr.md Out of Sync
+### Check 5: docs/adr.md Out of Sync
 
 Compare closed ADR Issues against the consolidated file:
 
@@ -91,6 +112,12 @@ Findings:
 ## Goal↔Issue Alignment
 
 | Finding | Goal ID | Issue # | Detail |
+|---------|---------|---------|--------|
+| ... | ... | ... | ... |
+
+## Goal Acceptance Criteria Drift
+
+| Goal ID | Issue # | Finding | Detail |
 |---------|---------|---------|--------|
 | ... | ... | ... | ... |
 
@@ -126,14 +153,17 @@ Do not create issues for zero findings.
 | Rationalization | Correct Response |
 | --- | --- |
 | "Fix the drift directly." | Inspect is read-only. Create a compensating issue instead. |
+| "Sync the Goal Issue checklist automatically." | Do not edit existing Goal Issues in nightly inspect. Report Acceptance Criteria drift only. |
 | "Every PR without a Goal is an orphan." | Only implementation PRs that directly advance a Goal need Goal links. Maintenance PRs are not orphans. |
 | "Check all PRs, not just recent ones." | Only check the last 3 days. Older drift is historical, not actionable nightly. |
 | "Update docs/adr.md directly." | Flag the gap in an issue. Let `rco-create-adr-md` do the update. |
-| "Skip a check because it probably has no findings." | Run all four checks every time. Assumptions are the source of invisible drift. |
+| "Skip a check because it probably has no findings." | Run all five checks every time. Assumptions are the source of invisible drift. |
 
 ## Red Flags
 
-- Inspect modifies existing files, issues, or PRs instead of creating compensating issues
+- Inspect modifies existing files, existing issues, or PRs instead of creating compensating issues
+- Inspect edits, checks, unchecks, deletes, or rewrites Goal Issue Acceptance Criteria checklist items
+- Goal Acceptance Criteria drift between Goal files and Goal Issue checklists is not checked
 - Maintenance PRs are flagged as orphans
 - PRs older than 3 days are included in orphan check
 - Check is skipped based on assumption
@@ -145,8 +175,10 @@ Do not create issues for zero findings.
 
 - [ ] `.rco/config.json` was read
 - [ ] If `.rco/config.json` was missing, user was told to run `rco-setup`
-- [ ] All four checks were run
+- [ ] All five checks were run
 - [ ] Goal↔Issue alignment was verified per rco-create-goal-issue rules
+- [ ] Goal file Acceptance Criteria were compared against Goal Issue checklist items
+- [ ] Acceptance Criteria drift was reported without editing existing Goal Issues
 - [ ] Goal Issues missing milestones were flagged
 - [ ] Only recent (3 days) closed implementation PRs without Goal links were flagged as orphans
 - [ ] Closed ADR Issues were compared against docs/adr.md
