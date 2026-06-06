@@ -27,6 +27,7 @@ configuration.
 - Fix items in a fixed order, skipping anything that already passes.
 - Keep setup idempotent.
 - `config.json` stores `branch_prefix`, `github_project_url`, `github_project_id`, and `pr_reviewers`.
+- GitHub Project setup (Step 5) only runs when `github_project_id` is non-empty. It creates views and the `AC Progress` field idempotently.
 - `REVIEW.md` stores project-specific PR review dimensions. Optional — `rco-review-pr` works without it but will check custom dimensions if present.
 - Do not overwrite an existing `.rco/` directory.
 
@@ -92,9 +93,50 @@ configuration.
      - `conditions`: list of natural-language conditions (can be empty)
      - `reviewers`: list of GitHub usernames
 
-5. Write `.rco/config.json` with all collected values.
+5. If `github_project_id` is present (non-empty), set up the GitHub Project:
 
-6. Ask the user whether to install GitHub Actions workflow templates. Offer both independently:
+   **5a. Ensure the `goal` and `adr` labels exist:**
+
+   ```bash
+   for label in goal adr; do
+     gh label list --json name --jq '.[].name' | grep -qx "$label" || gh label create "$label" --description "${label} issue" --color '0E8A16'
+   done
+   ```
+
+   **5b. Add `AC Progress` custom field if missing:**
+
+   ```bash
+   gh project field-list --format json --project-id <project-id> | jq -r '.[].name' | grep -qx 'AC Progress' || \
+     gh project field-create --name 'AC Progress' --data-type TEXT --project-id <project-id>
+   ```
+
+   **5c. Create 3 views if missing:**
+
+   Check existing views:
+
+   ```bash
+   gh project view --format json --jq '.views[].name' <project-number>
+   ```
+
+   - **Roadmap** (Table): group by Milestone, columns = Title / Status / AC Progress, sort by AC Progress ascending
+   - **Kanban** (Board): group by Status (Todo / In Progress / Done / Superseded)
+   - **ADR Log** (Table): filter by `adr` label, columns = Title / Status, sort by Created descending
+
+   For each view that does not already exist, create it via `gh project view-create`.
+
+   **5d. Add existing open Issues to the Project:**
+
+   ```bash
+   gh issue list --state open --json url --jq '.[].url' | while read url; do
+     gh project item-add <project-id> --url "$url"
+   done
+   ```
+
+   Skip this step if all items are already in the project (idempotent — `item-add` on an existing item is a no-op that errors harmlessly).
+
+6. Write `.rco/config.json` with all collected values.
+
+7. Ask the user whether to install GitHub Actions workflow templates. Offer both independently:
    - **Nightly review** — scheduled drift inspection, spaghetti code review, toil review
    - **PR review** — automatic review on PR open/update, and `/review` keyword in PR comments
 
@@ -115,7 +157,7 @@ configuration.
      - Add or remove review steps as needed
    - After the user adapts the file, remind them to configure the API key as a repository secret.
 
-7. Verify configuration completeness.
+8. Verify configuration completeness.
 
 ## Implementation Templates
 
@@ -170,6 +212,7 @@ After the user installs the missing dependency, re-run the failed setup step.
 | "Run non-idempotent commands." | Check the current state first and skip already-correct steps. |
 | "Overwrite .rco/ to update it." | Do not overwrite an existing `.rco/` directory. |
 | "Skip pr_reviewers, add it later." | Scope-to-reviewer mapping is essential for PR creation. At minimum configure the scopes the project uses. |
+| "Skip project setup because there are no issues yet." | Create the views and field anyway — they are empty until issues arrive. |
 | "Install the workflow without asking." | The workflow is optional — the user may have their own CI/CD solution. Ask first. |
 | "Overwrite the existing workflow." | Do not overwrite an existing `.github/workflows/nightly-review.yml`. |
 | "The workflow is ready to run after setup." | It is a template. The user must adapt provider secrets, skill paths, and pi flags before it can run. |
@@ -182,6 +225,8 @@ After the user installs the missing dependency, re-run the failed setup step.
 - Setup appends duplicate `mise` initialization lines to `~/.zshrc`
 - Tools are installed via `brew` instead of `mise`
 - `pr_reviewers` is empty after setup completes without the user explicitly declining
+- Project views or AC Progress field are missing when `github_project_id` is present
+- `goal` or `adr` labels are missing from the repository when `github_project_id` is present
 
 ## Verification
 
@@ -195,6 +240,10 @@ After the user installs the missing dependency, re-run the failed setup step.
 - [ ] `.rco/REVIEW.md` exists (optional — not required for setup to pass)
 - [ ] `branch_prefix` ends with `/`
 - [ ] `pr_reviewers` has at least one scope configured (or user explicitly declined)
+- [ ] If `github_project_id` is present, `goal` and `adr` labels exist in the repository
+- [ ] If `github_project_id` is present, `AC Progress` custom field exists in the Project
+- [ ] If `github_project_id` is present, Project has Roadmap / Kanban / ADR Log views
+- [ ] If `github_project_id` is present, existing open Issues were added to the Project
 - [ ] If user opted in, `.github/workflows/nightly-review.yml` was copied (or already existed)
 - [ ] If user opted in, user was told the workflow is a template and must be adapted
 - [ ] If user opted in, user was reminded to configure API key secret after adapting
