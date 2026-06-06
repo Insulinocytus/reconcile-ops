@@ -136,7 +136,8 @@ PRs:
 
 | Skill | 何时用 | 作用 |
 |-------|--------|------|
-| **rco-setup** | 项目初始化 | 初始化 `.rco/`、安装工具链、配置 GitHub Actions |
+| **rco-setup** | 项目初始化 | 初始化 `.rco/`、安装工具链、配置 GitHub Project + Actions |
+| **rco-sync-project** | Project AC Progress 过期时 | 同步 Goal Issue AC 进度到 Project |
 | **rco-distill-req** | 收到原始输入（会议纪要、访谈录音等） | 整理为结构化需求文档 |
 | **rco-define-goal** | 需求稳定后 | 产出 Goal 文件（验收标准 + 来源引用） |
 | **rco-create-goal-issue** | Goal 文件合入主分支后 | 为 Goal 创建带 AC checklist 的 Issue |
