@@ -103,14 +103,7 @@ configuration.
    done
    ```
 
-   **5b. Add `AC Progress` custom field if missing:**
-
-   ```bash
-   gh project field-list --format json --project-id <project-id> | jq -r '.[].name' | grep -qx 'AC Progress' || \
-     gh project field-create --name 'AC Progress' --data-type TEXT --project-id <project-id>
-   ```
-
-   **5c. Create 3 views if missing:**
+   **5b. Create 3 views if missing:**
 
    Check existing views:
 
@@ -118,13 +111,13 @@ configuration.
    gh project view --format json --jq '.views[].name' <project-number>
    ```
 
-   - **Roadmap** (Table): group by Milestone, columns = Title / Status / AC Progress, sort by AC Progress ascending
+   - **Roadmap** (Table): group by Milestone, columns = Title / Status. Sort by Milestone.
    - **Kanban** (Board): group by Status (Todo / In Progress / Done / Superseded)
    - **ADR Log** (Table): filter by `adr` label, columns = Title / Status, sort by Created descending
 
    For each view that does not already exist, create it via `gh project view-create`.
 
-   **5d. Add existing open Issues to the Project:**
+   **5c. Add existing open Issues to the Project:**
 
    ```bash
    gh issue list --state open --json url --jq '.[].url' | while read url; do
@@ -241,7 +234,7 @@ After the user installs the missing dependency, re-run the failed setup step.
 - [ ] `branch_prefix` ends with `/`
 - [ ] `pr_reviewers` has at least one scope configured (or user explicitly declined)
 - [ ] If `github_project_id` is present, `goal` and `adr` labels exist in the repository
-- [ ] If `github_project_id` is present, `AC Progress` custom field exists in the Project
+- [ ] If `github_project_id` is present, Project has Roadmap / Kanban / ADR Log views
 - [ ] If `github_project_id` is present, Project has Roadmap / Kanban / ADR Log views
 - [ ] If `github_project_id` is present, existing open Issues were added to the Project
 - [ ] If user opted in, `.github/workflows/nightly-review.yml` was copied (or already existed)

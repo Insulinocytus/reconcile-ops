@@ -137,11 +137,10 @@ PRs:
 | Skill | 何时用 | 作用 |
 |-------|--------|------|
 | **rco-setup** | 项目初始化 | 初始化 `.rco/`、安装工具链、配置 GitHub Project + Actions |
-| **rco-sync-project** | Project AC Progress 过期时 | 同步 Goal Issue AC 进度到 Project |
 | **rco-distill-req** | 收到原始输入（会议纪要、访谈录音等） | 整理为结构化需求文档 |
 | **rco-define-goal** | 需求稳定后 | 产出 Goal 文件（验收标准 + 来源引用） |
 | **rco-create-goal-issue** | Goal 文件合入主分支后 | 为 Goal 创建带 AC checklist 的 Issue |
-| **rco-create-issue** | 创建非 Goal / 非 ADR 的通用 Issue | Why / TODO / References 三段式 |
+| **rco-create-issue** | 需要创建非 Goal / 非 ADR 的 Issue | Why / TODO / References 三段式 |
 | **rco-create-pr** | 变更准备提交 | 创建 PR、匹配 reviewer、关联 Goal |
 | **rco-review-pr** | PR 需审查时 | 六轴 + 自定义维度审查 |
 | **rco-create-adr-issue** | 需要记录/推翻架构决策 | 创建 ADR Issue（`adr` 标签） |
