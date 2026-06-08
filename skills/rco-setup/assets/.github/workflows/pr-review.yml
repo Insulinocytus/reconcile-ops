@@ -1,4 +1,4 @@
-# PR Review Workflow Template
+# PR Review Workflow Concept Template
 #
 # Adapt before use:
 #   1. Replace <PROVIDER>_API_KEY with your chosen provider (ANTHROPIC_API_KEY, OPENAI_API_KEY, etc.)
@@ -30,19 +30,20 @@ jobs:
        contains(github.event.comment.body, '/review'))
 
     concurrency:
-      group: pr-review-${{ github.event.pull_request.number }}
+      group: pr-review-${{ github.event.pull_request.number || github.event.issue.number }}
       cancel-in-progress: true
 
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
+      issues: write
       contents: read
 
     steps:
       - name: Checkout PR
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: refs/pull/${{ github.event.pull_request.number || github.event.issue.number }}/head
 
       - name: Install mise and tools
         uses: jdx/mise-action@v4
@@ -58,4 +59,4 @@ jobs:
           # Adjust --model, --thinking, --skill path as needed
           pi -p --no-extensions \
             --skill skills/rco-review-pr/SKILL.md \
-            "Review PR #${{ github.event.pull_request.number }}. Trigger mode: PR Actions."
+            "Review PR #${{ github.event.pull_request.number || github.event.issue.number }}. Trigger mode: PR Actions."

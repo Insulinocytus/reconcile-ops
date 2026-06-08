@@ -19,7 +19,7 @@ checklist so PMs can see progress without creating speculative task Issues.
 
 - Creating missing issues for `docs/goals/G-*.md`
 - Backfilling GitHub Project issues after Goal files are merged
-- Updating Issue status after Goal Superseded changes
+- Updating GitHub Project Status after Goal Superseded changes
 
 ## Core Principles
 
@@ -29,9 +29,9 @@ checklist so PMs can see progress without creating speculative task Issues.
 - The Goal file is the canonical source of Acceptance Criteria. The Issue checklist is the progress view that humans manually check off.
 - This skill creates Issues from scratch. `rco-create-pr` is responsible for appending PR links to existing Issue bodies. This skill never appends PR links.
 - A Goal maps to exactly one GitHub Project issue. Find the issue by searching with `--label goal`.
-- GitHub Project owns status (Todo / In Progress / Done / Superseded).
+- GitHub Project owns status (Todo / In Progress / Done / Superseded). `github_project_id` must be configured.
 - GitHub Milestone owns deadline.
-- If a Goal file has `> **Superseded**`, set the issue status to Superseded.
+- If a Goal file has `> **Superseded**`, set the GitHub Project Status to Superseded.
 
 ## Standard Workflow
 
@@ -64,8 +64,8 @@ PRs:
 ```
 
 8. If an issue already exists, compare its Acceptance Criteria checklist with the Goal file Acceptance Criteria. Report any drift, but do not rewrite the existing issue.
-9. Add the issue to the GitHub Project when `github_project_id` is present in `.rco/config.json`. If `github_project_id` is empty, skip this step.
-10. If the Goal file has `> **Superseded**`, set the issue status to Superseded.
+9. Add the issue to the GitHub Project. If `github_project_id` is empty, stop and tell the user to run `rco-setup` to configure the required GitHub Project.
+10. If the Goal file has `> **Superseded**`, set the GitHub Project Status to Superseded.
 11. Skip existing issues without changing them, except for Superseded status handling when required.
 
 ## Implementation Templates
@@ -106,8 +106,8 @@ gh project item-add <project-id> --url <issue-url>
 
 If GitHub repo context is missing and cannot be discovered with `gh repo view`,
 stop and ask for the missing repository information. Do not guess a remote.
-If `github_project_id` is empty in the config and the user wants issues added to a project,
-tell the user to run `rco-setup` to configure the project.
+If `github_project_id` is empty in the config, stop and tell the user to run `rco-setup`
+to configure the required GitHub Project.
 
 ## Common Rationalizations
 
@@ -127,7 +127,7 @@ tell the user to run `rco-setup` to configure the project.
 - Issue body is missing the PRs section
 - Existing issue content is rewritten instead of drift being reported
 - Duplicate issue is created for the same Goal ID
-- Superseded Goal does not have its issue status set to Superseded
+- Superseded Goal does not have its GitHub Project Status set to Superseded
 - Agent proceeds when `.rco/config.json` is missing without telling the user to run `rco-setup`
 
 ## Verification
@@ -143,6 +143,6 @@ tell the user to run `rco-setup` to configure the project.
 - [ ] Created issue body contains only Goal link, Acceptance Criteria checklist, and PRs section
 - [ ] Checklist items preserve Goal file Acceptance Criteria text and order
 - [ ] Existing issue Acceptance Criteria drift was reported, not auto-fixed
-- [ ] If Goal file has Superseded marker, issue status was set to Superseded
-- [ ] If `github_project_id` was present, the issue was added to the project
+- [ ] If Goal file has Superseded marker, GitHub Project Status was set to Superseded
+- [ ] The issue was added to the configured GitHub Project
 - [ ] Existing issues were skipped, not modified except for required Superseded status handling

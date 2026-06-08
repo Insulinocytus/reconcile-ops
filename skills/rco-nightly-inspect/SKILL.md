@@ -35,21 +35,24 @@ artifacts directly.
 
 ### Check 1: Goal↔Issue Alignment
 
-Collect all Goal files and all Goal Issues, then compare:
+Collect all Goal files, Goal Issues, and GitHub Project status values, then compare:
 
 ```bash
 # Goal files
 rg -o 'G-[0-9]{6}' docs/goals --no-filename | sort -u
 
 # Goal Issues
-gh issue list --label goal --state all --json number,title,state
+gh issue list --label goal --state all --json number,title
+
+# Goal Project status
+gh project item-list <project-number> --owner <org-or-user> --format json
 ```
 
 Findings:
 - Goal file has no corresponding Issue → create Issue (per `rco-create-goal-issue` rules)
 - Goal Issue has no corresponding Goal file → flag as dangling Issue
-- Goal file has `> **Superseded**` but Issue status is not Superseded → flag status mismatch
-- Issue status is Superseded but Goal file has no Superseded marker → flag status mismatch
+- Goal file has `> **Superseded**` but GitHub Project Status is not Superseded → flag status mismatch
+- GitHub Project Status is Superseded but Goal file has no Superseded marker → flag status mismatch
 
 ### Check 2: Goal Acceptance Criteria Drift
 
